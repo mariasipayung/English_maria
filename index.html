@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Maria Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #4a4a4a;
+            background: linear-gradient(135deg, #f8c8dc 0%, #e6d6f5 100%);
+            min-height: 100vh;
+        }
+        :root {
+            --primary-pink: #ff9aa2;
+            --secondary-violet: #b19cd9;
+            --deep-violet: #7b68ee;
+            --soft-pink: #f8c8dc;
+            --light-violet: #e6d6f5;
+            --white: #ffffff;
+            --dark-text: #2d1b69;
+            --shadow: 0 15px 35px rgba(177, 156, 217, 0.3);
+            --gradient: linear-gradient(135deg, var(--primary-pink), var(--secondary-violet));
+        }
+
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px); z-index: 1000;
+            padding: 1rem 0; box-shadow: var(--shadow);
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 0 2rem;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif; font-size: 1.4rem;
+            font-weight: 700; background: var(--gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .hero {
+            min-height: 80vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center; padding: 100px 2rem;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem);
+            background: var(--gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; margin-bottom: 1rem;
+        }
+
+        .progress-section { background: white; padding: 4rem 2rem; text-align: center; }
+        .level-container { max-width: 900px; margin: 0 auto; }
+        .level-progress {
+            background: var(--light-violet); height: 25px;
+            border-radius: 15px; overflow: hidden; margin: 2rem 0;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .level-fill {
+            height: 100%; background: var(--gradient); width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 15px; position: relative;
+        }
+        .level-fill::after {
+            content: attr(data-percent) '%'; position: absolute;
+            right: 10px; top: 50%; transform: translateY(-50%);
+            color: white; font-weight: bold; font-size: 0.8rem;
+        }
+
+        .level-stats {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem; margin-top: 2rem;
+        }
+        .stat-box {
+            background: #fbfaff; padding: 1.5rem; border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .stat-number { font-size: 2rem; font-weight: 800; color: var(--deep-violet); }
+
+        .games-grid {
+            max-width: 1200px; margin: 4rem auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; padding: 0 2rem;
+        }
+        .game-card {
+            background: white; border-radius: 25px; padding: 2.5rem;
+            box-shadow: var(--shadow); transition: transform 0.3s ease;
+            text-align: center; cursor: pointer;
+        }
+        .game-card:hover { transform: translateY(-10px); }
+        .level-locked { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        /* Modal Styles */
+        .game-modal {
+            display: none; position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+            align-items: center; justify-content: center;
+        }
+        .game-modal.active { display: flex; }
+        .game-container {
+            background: white; border-radius: 30px; width: 90%;
+            max-width: 800px; max-height: 90vh; overflow-y: auto;
+            padding: 2rem; position: relative;
+        }
+        .close-game {
+            position: absolute; right: 20px; top: 20px;
+            font-size: 2rem; cursor: pointer; border: none; background: none;
+        }
+
+        /* Game Elements */
+        .answer-options {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0;
+        }
+        .answer-btn {
+            padding: 1.2rem; border: 2px solid var(--light-violet);
+            background: white; border-radius: 15px; cursor: pointer;
+            font-weight: 600; transition: all 0.2s; font-family: 'Poppins', sans-serif;
+        }
+        .answer-btn:hover:not(:disabled) { background: var(--light-violet); }
+        .answer-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+        .answer-btn.incorrect { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+        
+        .hint-btn {
+            background: var(--secondary-violet); color: white; border: none;
+            padding: 0.5rem 1rem; border-radius: 10px; cursor: pointer; margin: 0.5rem;
+        }
+        .btn {
+            background: var(--gradient); color: white; border: none;
+            padding: 1rem 2rem; border-radius: 25px; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn:hover { opacity: 0.9; transform: scale(1.05); }
+
+        @media (max-width: 600px) { .answer-options { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🌸 Maria Bloom Academy</a>
+            <div style="font-weight: 600;">
+                ⭐ <span id="totalScoreNav">0</span> pts
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Welcome to Maria's Academy</h1>
+        <p>Haloo ! Mari tingkatkan penguasaan kosakata bahasa Inggris Anda.</p>
+        <br>
+        <button class="btn" onclick="document.getElementById('progress').scrollIntoView({behavior:'smooth'})">Start Journey</button>
+    </section>
+
+    <section id="progress" class="progress-section">
+        <div class="level-container">
+            <h2 id="currentLevelTitle">Level 1: Novice</h2>
+            <div class="level-progress">
+                <div class="level-fill" id="levelProgress" data-percent="0"></div>
+            </div>
+            <div class="level-stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="currentLevelNav">1</div>
+                    <div>Current Level</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div>Accuracy</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="totalScore">0</div>
+                    <div>Total Points</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="games-grid">
+        <div class="game-card" onclick="startVocabGame()">
+            <i class="fas fa-brain" style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 1rem;"></i>
+            <h3>Vocabulary Master</h3>
+            <p id="vocabLevelDesc">Start Level 1 Challenge</p>
+        </div>
+        <div class="game-card level-locked" id="lock4">
+            <i class="fas fa-lock"></i>
+            <h3>Word Link</h3>
+            <p>Unlocks at Level 4</p>
+        </div>
+        <div class="game-card level-locked" id="lock7">
+            <i class="fas fa-lock"></i>
+            <h3>Sentence Craft</h3>
+            <p>Unlocks at Level 7</p>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="gameModal" class="game-modal">
+        <div class="game-container">
+            <button class="close-game" onclick="closeGame()">&times;</button>
+            <h2 id="gameTitleModal">Maria's Quiz</h2>
+            <hr><br>
+            <div id="gameContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // DATA KOSAKATA 10 LEVEL (LENGKAP)
+        const levelsData = {
+            1: [
+                {word: "Ephemeral", def: "Lasting for a very short time", syn: "Transient", ex: "The beauty of cherry blossoms is ephemeral."},
+                {word: "Serendipity", def: "Finding something good by accident", syn: "Luck", ex: "Meeting my best friend was pure serendipity."},
+                {word: "Resilient", def: "Able to recover quickly", syn: "Strong", ex: "She is resilient after her failure."},
+                {word: "Luminous", def: "Full of light", syn: "Bright", ex: "The moon was luminous last night."},
+                {word: "Tenacious", def: "Persistent and determined", syn: "Stubborn", ex: "His tenacious effort led to success."},
+                {word: "Benevolent", def: "Kind and generous", syn: "Charitable", ex: "The benevolent man donated his wealth."},
+                {word: "Pragmatic", def: "Realistic and practical", syn: "Sensible", ex: "We need a pragmatic solution to this problem."}
+            ],
+            2: [
+                {word: "Audacious", def: "Bold and daring", syn: "Fearless", ex: "It was an audacious move to quit his job."},
+                {word: "Capricious", def: "Unpredictable changes", syn: "Fickle", ex: "The weather here is very capricious."},
+                {word: "Fastidious", def: "Very attentive to detail", syn: "Meticulous", ex: "He is fastidious about his appearance."},
+                {word: "Gregarious", def: "Sociable and fond of company", syn: "Outgoing", ex: "Most politicians are gregarious people."},
+                {word: "Mitigate", def: "Make something less severe", syn: "Reduce", ex: "We must mitigate the effects of pollution."},
+                {word: "Ubiquitous", def: "Found everywhere", syn: "Common", ex: "Smartphones are ubiquitous nowadays."},
+                {word: "Vibrant", def: "Full of energy and life", syn: "Lively", ex: "The city has a vibrant nightlife."}
+            ],
+            3: [
+                {word: "Eloquent", def: "Fluent or persuasive in speaking", syn: "Articulate", ex: "Her eloquent speech moved the audience."},
+                {word: "Frugal", def: "Simple and plain/costing little", syn: "Thrifty", ex: "He lives a frugal life to save money."},
+                {word: "Inherent", def: "Existing as a natural part", syn: "Intrinsic", ex: "Danger is inherent in mountain climbing."},
+                {word: "Lucid", def: "Easy to understand", syn: "Clear", ex: "The teacher gave a lucid explanation."},
+                {word: "Meticulous", def: "Showing great attention to detail", syn: "Careful", ex: "She is meticulous in her research."},
+                {word: "Novel", def: "New and unusual", syn: "Original", ex: "That is a novel way to solve the puzzle."},
+                {word: "Obscure", def: "Not discovered or known", syn: "Unclear", ex: "The origin of the custom is obscure."}
+            ],
+            4: [
+                {word: "Abstain", def: "Restrain oneself from doing", syn: "Refrain", ex: "I will abstain from eating chocolate."},
+                {word: "Adversity", def: "Difficulties or misfortune", syn: "Hardship", ex: "He showed courage in the face of adversity."},
+                {word: "Complacent", def: "Uncritically satisfied with oneself", syn: "Smug", ex: "Don't become complacent about your success."},
+                {word: "Diligent", def: "Showing care in one's work", syn: "Hardworking", ex: "Maria is a very diligent student."},
+                {word: "Empathy", def: "Understanding others' feelings", syn: "Compassion", ex: "Nurses should have a lot of empathy."},
+                {word: "Fortitude", def: "Courage in pain or adversity", syn: "Brave", ex: "She bore her illness with fortitude."},
+                {word: "Gullible", def: "Easily persuaded to believe", syn: "Naive", ex: "He is so gullible he believes everything."}
+            ],
+            5: [
+                {word: "Haughty", def: "Arrogantly superior", syn: "Proud", ex: "The haughty waiter ignored us."},
+                {word: "Inevitable", def: "Certain to happen", syn: "Unavoidable", ex: "Change is inevitable in life."},
+                {word: "Jubilant", def: "Feeling great happiness", syn: "Joyful", ex: "The fans were jubilant after the win."},
+                {word: "Kindle", def: "Arouse or inspire", syn: "Ignite", ex: "The book kindled my interest in history."},
+                {word: "Lethargic", def: "Sluggish and apathetic", syn: "Lazy", ex: "I felt lethargic after the big meal."},
+                {word: "Mundane", def: "Lacking excitement; dull", syn: "Ordinary", ex: "It was just a mundane Monday morning."},
+                {word: "Nonchalant", def: "Feeling or appearing calm", syn: "Cool", ex: "She was nonchalant about the exam."}
+            ],
+            6: [
+                {word: "Optimist", def: "Person who is hopeful", syn: "Idealist", ex: "An optimist sees the glass half full."},
+                {word: "Pensive", def: "Engaged in deep thought", syn: "Thoughtful", ex: "He looked pensive as he stared out."},
+                {word: "Quaint", def: "Attractively unusual or old-fashioned", syn: "Charming", ex: "We stayed in a quaint little cottage."},
+                {word: "Redundant", def: "No longer needed or useful", syn: "Extra", ex: "Avoid redundant words in your essay."},
+                {word: "Scrutinize", def: "Examine or inspect closely", syn: "Analyze", ex: "The detective scrutinized the scene."},
+                {word: "Tactful", def: "Having a sense of what is polite", syn: "Diplomatic", ex: "He gave a tactful answer to the boss."},
+                {word: "Utopian", def: "Modeled on a perfect state", syn: "Idealistic", ex: "A world without war is a utopian idea."}
+            ],
+            7: [
+                {word: "Venerable", def: "Accorded a great deal of respect", syn: "Respected", ex: "The venerable old tree stood for ages."},
+                {word: "Wary", def: "Feeling or showing caution", syn: "Cautious", ex: "Be wary of strangers offering gifts."},
+                {word: "Yield", def: "Produce or provide", syn: "Give", ex: "The farm yields high-quality milk."},
+                {word: "Zeal", def: "Great energy or enthusiasm", syn: "Passion", ex: "He worked with great zeal and speed."},
+                {word: "Affluence", def: "State of having a lot of money", syn: "Wealth", ex: "The family lived in great affluence."},
+                {word: "Brusque", def: "Abrupt or offhand in speech", syn: "Blunt", ex: "The doctor was brusque but efficient."},
+                {word: "Candid", def: "Truthful and straightforward", syn: "Frank", ex: "Thank you for your candid feedback."}
+            ],
+            8: [
+                {word: "Disingenuous", def: "Not candid or sincere", syn: "Dishonest", ex: "It was disingenuous of him to say that."},
+                {word: "Enigma", def: "Person or thing that is mysterious", syn: "Mystery", ex: "His disappearance remains an enigma."},
+                {word: "Facetious", def: "Treating serious issues with humor", syn: "Joking", ex: "Stop being facetious during the trial."},
+                {word: "Garrulous", def: "Excessively talkative", syn: "Chatty", ex: "The garrulous neighbor never stops."},
+                {word: "Hapless", def: "Unfortunate or unlucky", syn: "Luckless", ex: "The hapless victims lost everything."},
+                {word: "Impeccable", def: "In accordance with highest standards", syn: "Flawless", ex: "She speaks impeccable English."},
+                {word: "Juxtapose", def: "Place close together for contrast", syn: "Compare", ex: "Juxtapose the old and new photos."}
+            ],
+            9: [
+                {word: "Languid", def: "Displaying a disinclination for effort", syn: "Relaxed", ex: "The hot day made us feel languid."},
+                {word: "Mellifluous", def: "Sweet or musical; pleasant to hear", syn: "Sweet-sounding", ex: "She has a mellifluous singing voice."},
+                {word: "Nefarious", def: "Wicked or criminal", syn: "Evil", ex: "A nefarious plot to take over the city."},
+                {word: "Obsequious", def: "Obedient or attentive to a fawning degree", syn: "Servile", ex: "The obsequious assistants bowed low."},
+                {word: "Pellucid", def: "Translucently clear", syn: "Transparent", ex: "The mountain stream was pellucid."},
+                {word: "Quixotic", def: "Exceedingly idealistic; unrealistic", syn: "Idealistic", ex: "A quixotic quest to save the world."},
+                {word: "Recalcitrant", def: "Having an uncooperative attitude", syn: "Unruly", ex: "A recalcitrant child refused to eat."}
+            ],
+            10: [
+                {word: "Sycophant", def: "Person who acts obsequiously to gain advantage", syn: "Flatterer", ex: "The king was surrounded by sycophants."},
+                {word: "Trenchant", def: "Vigorous or incisive in expression", syn: "Sharp", ex: "His trenchant criticism was feared."},
+                {word: "Umbrage", def: "Offense or annoyance", syn: "Resentment", ex: "She took umbrage at his rude remark."},
+                {word: "Vicissitude", def: "Change of circumstances or fortune", syn: "Alteration", ex: "The vicissitudes of the stock market."},
+                {word: "Winsome", def: "Attractive or appealing in appearance", syn: "Charming", ex: "A winsome smile on her face."},
+                {word: "Xenophobia", def: "Dislike of or prejudice against people from other countries", syn: "Prejudice", ex: "We must fight xenophobia everywhere."},
+                {word: "Zenith", def: "The time at which something is most powerful", syn: "Peak", ex: "He is at the zenith of his career."}
+            ]
+        };
+
+        // APP STATE
+        let currentLevel = 1;
+        let totalScore = 0;
+        let accuracyCount = { correct: 0, total: 0 };
+        let activeQuestions = [];
+        let currentIndex = 0;
+
+        function initApp() {
+            updateUI();
+            checkUnlocks();
+        }
+
+        function updateUI() {
+            document.getElementById('currentLevelNav').textContent = currentLevel;
+            document.getElementById('totalScore').textContent = totalScore.toLocaleString();
+            document.getElementById('totalScoreNav').textContent = totalScore.toLocaleString();
+            
+            const acc = accuracyCount.total > 0 ? Math.round((accuracyCount.correct / accuracyCount.total) * 100) : 0;
+            document.getElementById('accuracy').textContent = acc + '%';
+            
+            const names = ['Novice', 'Beginner', 'Intermediate', 'Advanced', 'Expert', 'Master I', 'Master II', 'Professional', 'Elite', 'Legendary'];
+            document.getElementById('currentLevelTitle').textContent = `Level ${currentLevel}: ${names[currentLevel-1]}`;
+            
+            const progress = (currentLevel / 10) * 100;
+            const bar = document.getElementById('levelProgress');
+            bar.style.width = progress + '%';
+            bar.dataset.percent = Math.round(progress);
+        }
+
+        function checkUnlocks() {
+            document.getElementById('lock4').classList.toggle('level-locked', currentLevel < 4);
+            document.getElementById('lock7').classList.toggle('level-locked', currentLevel < 7);
+            document.getElementById('vocabLevelDesc').textContent = `Level ${currentLevel} Challenge`;
+        }
+
+        function startVocabGame() {
+            const data = levelsData[currentLevel] || levelsData[1];
+            activeQuestions = shuffle([...data]);
+            currentIndex = 0;
+            showQuestion();
+            document.getElementById('gameModal').classList.add('active');
+        }
+
+        function showQuestion() {
+            const q = activeQuestions[currentIndex];
+            const options = generateOptions(q.word);
+            
+            const content = document.getElementById('gameContent');
+            content.innerHTML = `
+                <div style="text-align:center">
+                    <p style="color: #888">Question ${currentIndex + 1} of ${activeQuestions.length}</p>
+                    <h2 style="margin: 1rem 0; color: var(--dark-text); font-size: 1.5rem">"${q.def}"</h2>
+                    <p style="margin-bottom: 1rem"><i>Example: ${q.ex}</i></p>
+                    
+                    <div class="answer-options">
+                        ${options.map(opt => `<button class="answer-btn" onclick="handleAnswer(this, '${opt}', '${q.word}')">${opt}</button>`).join('')}
+                    </div>
+
+                    <div id="hintArea" style="min-height: 50px">
+                        <button class="hint-btn" onclick="getHint('${q.word}', '${q.syn}')">💡 Need a Hint? (-5 pts)</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateOptions(correctWord) {
+            let pool = levelsData[currentLevel].map(item => item.word).filter(w => w !== correctWord);
+            let distractors = shuffle(pool).slice(0, 3);
+            return shuffle([correctWord, ...distractors]);
+        }
+
+        function handleAnswer(btn, selected, correct) {
+            const allBtns = document.querySelectorAll('.answer-btn');
+            allBtns.forEach(b => b.disabled = true);
+
+            accuracyCount.total++;
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                totalScore += 20;
+                accuracyCount.correct++;
+            } else {
+                btn.classList.add('incorrect');
+                allBtns.forEach(b => {
+                    if (b.textContent === correct) b.classList.add('correct');
+                });
+            }
+
+            updateUI();
+
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < activeQuestions.length) {
+                    showQuestion();
+                } else {
+                    finishQuiz();
+                }
+            }, 1500);
+        }
+
+        function getHint(word, syn) {
+            const area = document.getElementById('hintArea');
+            area.innerHTML = `<p style="color: var(--deep-violet); font-weight: 600">Synonym: ${syn} | Starts with: ${word[0].toUpperCase()}</p>`;
+            totalScore = Math.max(0, totalScore - 5);
+            updateUI();
+        }
+
+        function finishQuiz() {
+            const winThreshold = 0.7; 
+            const success = (accuracyCount.correct / accuracyCount.total) >= winThreshold;
+
+            let message = success ? 
+                `🎉 Amazing, Maria! You mastered Level ${currentLevel}!` : 
+                `📚 Not quite enough. You need 70% accuracy. Let's try again, Maria!`;
+
+            if (success && currentLevel < 10) currentLevel++;
+
+            document.getElementById('gameContent').innerHTML = `
+                <div style="text-align:center">
+                    <h3>Quiz Complete!</h3>
+                    <p style="font-size: 1.2rem; margin: 1rem 0">${message}</p>
+                    <button class="btn" onclick="closeGame()">Back to Dashboard</button>
+                </div>
+            `;
+            initApp();
+        }
+
+        function closeGame() {
+            document.getElementById('gameModal').classList.remove('active');
+        }
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        initApp();
+    </script>
+</body>
+</html>

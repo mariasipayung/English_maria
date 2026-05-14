@@ -8,300 +8,174 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #4a4a4a;
-            background: linear-gradient(135deg, #f8c8dc 0%, #e6d6f5 100%);
-            min-height: 100vh;
-        }
-        :root {
-            --primary-pink: #ff9aa2;
-            --secondary-violet: #b19cd9;
-            --deep-violet: #7b68ee;
-            --white: #ffffff;
-            --shadow: 0 15px 35px rgba(177, 156, 217, 0.3);
-            --gradient: linear-gradient(135deg, var(--primary-pink), var(--secondary-violet));
-        }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f8c8dc 0%, #e6d6f5 100%); min-height: 100vh; padding-bottom: 50px; }
+        :root { --pink: #ff9aa2; --violet: #b19cd9; --deep: #7b68ee; --grad: linear-gradient(135deg, var(--pink), var(--violet)); }
 
-        .navbar {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px); z-index: 1000;
-            padding: 1rem 0; box-shadow: var(--shadow);
-        }
-        .nav-container {
-            max-width: 1200px; margin: 0 auto;
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 0 2rem;
-        }
-        .logo {
-            font-family: 'Playfair Display', serif; font-size: 1.4rem;
-            font-weight: 700; background: var(--gradient);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-
-        #loginOverlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-            z-index: 3000; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(10px);
-        }
-        .login-box {
-            background: white; padding: 2.5rem; border-radius: 30px;
-            text-align: center; width: 90%; max-width: 400px;
-        }
-        .login-input {
-            width: 100%; padding: 12px; margin: 20px 0;
-            border: 2px solid #eee; border-radius: 10px; font-family: inherit; text-align: center;
-        }
-
-        .hero { min-height: 40vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 120px; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .progress-section { background: white; padding: 2rem; text-align: center; margin: 20px auto; max-width: 900px; border-radius: 20px; box-shadow: var(--shadow); }
-        .level-progress { background: #eee; height: 15px; border-radius: 10px; overflow: hidden; margin: 15px 0; }
-        .level-fill { height: 100%; background: var(--gradient); transition: 1s; }
+        /* Login */
+        #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .login-box { background: white; padding: 2.5rem; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; }
         
-        .level-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .stat-box { background: #fdfbff; padding: 1rem; border-radius: 15px; border: 1px solid #eee; }
-        .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--deep-violet); }
+        /* Navbar */
+        .navbar { position: fixed; top: 0; width: 100%; background: white; padding: 1rem; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-family: 'Playfair Display', serif; font-weight: 700; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .games-grid { max-width: 1000px; margin: 2rem auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 0 20px; }
-        .game-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: 0.3s; }
-        .game-card:hover { transform: translateY(-10px); border: 2px solid var(--primary-pink); }
+        .hero { padding: 120px 20px 40px; text-align: center; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #444; margin-bottom: 10px; }
+        
+        /* Games Grid */
+        .games-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 0 20px; }
+        .game-card { background: white; border-radius: 25px; padding: 2rem; text-align: center; cursor: pointer; transition: 0.3s; position: relative; border: 2px solid transparent; }
+        .game-card.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
+        .game-card:hover:not(.locked) { transform: translateY(-10px); border-color: var(--pink); box-shadow: 0 15px 35px rgba(177, 156, 217, 0.4); }
+        
+        .lock-icon { position: absolute; top: 20px; right: 20px; color: #888; }
+        .lvl-badge { background: var(--grad); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; display: inline-block; }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; padding: 2rem; border-radius: 25px; width: 100%; max-width: 500px; text-align: center; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; padding: 2.5rem; border-radius: 30px; width: 90%; max-width: 500px; text-align: center; }
         
-        .answer-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
-        .answer-btn { width: 100%; padding: 12px; border: 2px solid #eee; background: white; border-radius: 12px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif; }
-        .answer-btn.correct { background: #d4edda !important; border-color: #28a745 !important; }
-        .answer-btn.incorrect { background: #f8d7da !important; border-color: #dc3545 !important; }
-        
-        .btn { background: var(--gradient); color: white; border: none; padding: 10px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        .ans-btn { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #eee; background: white; border-radius: 15px; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.2s; }
+        .ans-btn:hover { border-color: var(--violet); background: #fdfbff; }
+        .word-input { width: 100%; padding: 15px; border: 2px solid var(--violet); border-radius: 15px; text-align: center; font-size: 1.3rem; margin: 20px 0; font-family: inherit; }
+        .btn { background: var(--grad); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="loginOverlay">
         <div class="login-box">
-            <h2 style="font-family: 'Playfair Display', serif;">Maria's Academy</h2>
-            <p>Masukkan namamu untuk menyimpan progres:</p>
-            <input type="text" id="userNameInput" class="login-input" placeholder="Namamu...">
-            <button class="btn" onclick="userLogin()">Mulai</button>
+            <h2 style="font-family:'Playfair Display'">Maria's Bloom Academy</h2>
+            <p>Siapa yang sedang belajar?</p>
+            <input type="text" id="nameIn" style="width:100%; padding:12px; margin:20px 0; border-radius:12px; border:1px solid #ddd; text-align:center;" placeholder="Masukkan Nama...">
+            <button class="btn" onclick="login()">Buka Pintu Belajar</button>
         </div>
     </div>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">🌸 Maria Bloom</a>
-            <div style="font-weight: bold;">⭐ <span id="navScore">0</span> pts</div>
-        </div>
-    </nav>
+    <nav class="navbar"><div class="nav-container"><a href="#" class="logo">🌸 Maria Juliati Bloom</a><div>⭐ <span id="navScore">0</span></div></div></nav>
 
-    <section class="hero">
-        <h1>Maria Academy</h1>
-        <p>Halo, <strong id="displayName">Player</strong>! Taklukkan semua kosa kata.</p>
-    </section>
-
-    <section class="progress-section">
-        <h3 id="levelTextDisplay">Level 1: Novice</h3>
-        <div class="level-progress">
-            <div class="level-fill" id="progressBar"></div>
-        </div>
-        <div class="level-stats">
-            <div class="stat-box"><div class="stat-number" id="statLevel">1</div>Level</div>
-            <div class="stat-box"><div class="stat-number" id="statAcc">0%</div>Akurasi</div>
-            <div class="stat-box"><div class="stat-number" id="statScore">0</div>Skor</div>
-        </div>
-    </section>
+    <div class="hero">
+        <h1>Welcome, <span id="userDisp">Maria</span>!</h1>
+        <p>Buka <b>Word Link</b> di Level 5 Vocab, Buka <b>Sentence</b> di Level 5 Word Link.</p>
+    </div>
 
     <div class="games-grid">
-        <div class="game-card" onclick="openQuiz(1)">
-            <i class="fas fa-brain" style="color: var(--primary-pink); font-size: 2.5rem;"></i>
+        <div class="game-card" id="card1" onclick="start(1)">
+            <div class="lvl-badge">Level <span id="l1_val">1</span>/10</div>
+            <i class="fas fa-brain" style="color:var(--pink); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
             <h3>Vocab Master</h3>
-            <p>Level 1 - 3</p>
+            <p>Tebak Arti Kata</p>
         </div>
-        <div class="game-card" onclick="openQuiz(4)">
-            <i class="fas fa-puzzle-piece" style="color: var(--secondary-violet); font-size: 2.5rem;"></i>
+
+        <div class="game-card locked" id="card2" onclick="start(2)">
+            <div class="lock-icon" id="lock2"><i class="fas fa-lock"></i></div>
+            <div class="lvl-badge">Level <span id="l2_val">1</span>/10</div>
+            <i class="fas fa-keyboard" style="color:var(--violet); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
             <h3>Word Link</h3>
-            <p>Level 4 - 6</p>
+            <p id="hint2">Terkunci (Butuh Vocab Lvl 5)</p>
         </div>
-        <div class="game-card" onclick="openQuiz(7)">
-            <i class="fas fa-magic" style="color: var(--deep-violet); font-size: 2.5rem;"></i>
+
+        <div class="game-card locked" id="card3" onclick="start(3)">
+            <div class="lock-icon" id="lock3"><i class="fas fa-lock"></i></div>
+            <div class="lvl-badge">Level <span id="l3_val">1</span>/10</div>
+            <i class="fas fa-spell-check" style="color:var(--deep); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
             <h3>Sentence Craft</h3>
-            <p>Level 7 - 10</p>
+            <p id="hint3">Terkunci (Butuh Word Lvl 5)</p>
         </div>
     </div>
 
-    <div id="gameModal" class="modal">
-        <div class="modal-content">
-            <div id="quizBody"></div>
-            <button class="btn" style="margin-top: 20px; background:#888;" onclick="closeModal()">Tutup</button>
-        </div>
-    </div>
+    <div id="gModal" class="modal"><div class="modal-content" id="mBody"></div></div>
 
     <script>
-        const allVocab = {
-            1: [
-                {w: "Ephemeral", d: "Tahan sebentar saja", s: "Transient"},
-                {w: "Serendipity", d: "Penemuan kebetulan yang indah", s: "Luck"},
-                {w: "Resilient", d: "Cepat pulih / tangguh", s: "Strong"},
-                {w: "Luminous", d: "Bercahaya terang", s: "Bright"},
-                {w: "Tenacious", d: "Gigih / tidak menyerah", s: "Stubborn"},
-                {w: "Benevolent", d: "Baik hati & dermawan", s: "Kind"},
-                {w: "Pragmatic", d: "Praktis / realistis", s: "Practical"}
-            ],
-            2: [
-                {w: "Audacious", d: "Berani / nekat", s: "Bold"},
-                {w: "Capricious", d: "Berubah-ubah / plin-plan", s: "Fickle"},
-                {w: "Gregarious", d: "Suka bergaul", s: "Sociable"},
-                {w: "Mitigate", d: "Meredakan / mengurangi", s: "Reduce"},
-                {w: "Ubiquitous", d: "Ada di mana-mana", s: "Common"},
-                {w: "Vibrant", d: "Penuh energi / hidup", s: "Lively"},
-                {w: "Eloquent", d: "Fasih berbicara", s: "Articulate"}
-            ],
-            3: [
-                {w: "Frugal", d: "Hemat / tidak boros", s: "Thrifty"},
-                {w: "Inherent", d: "Sifat dasar / melekat", s: "Intrinsic"},
-                {w: "Lucid", d: "Mudah dimengerti / jelas", s: "Clear"},
-                {w: "Meticulous", d: "Sangat teliti", s: "Careful"},
-                {w: "Novel", d: "Baru dan unik", s: "Original"},
-                {w: "Obscure", d: "Samar / sulit dilihat", s: "Unclear"},
-                {w: "Abstain", d: "Menjauhkan diri / puasa", s: "Refrain"}
-            ],
-            4: [
-                {w: "Adversity", d: "Kemalangan / kesulitan", s: "Hardship"},
-                {w: "Diligent", d: "Rajin / tekun", s: "Hardworking"},
-                {w: "Empathy", d: "Kemampuan memahami perasaan", s: "Compassion"},
-                {w: "Fortitude", d: "Ketabahan hati", s: "Brave"},
-                {w: "Gullible", d: "Mudah ditipu / polos", s: "Naive"},
-                {w: "Haughty", d: "Sombong / angkuh", s: "Proud"},
-                {w: "Inevitable", d: "Pasti terjadi", s: "Unavoidable"}
-            ],
-            5: [
-                {w: "Jubilant", d: "Sangat gembira", s: "Joyful"},
-                {w: "Lethargic", d: "Lesu / tidak bertenaga", s: "Lazy"},
-                {w: "Mundane", d: "Membosankan / biasa", s: "Dull"},
-                {w: "Nonchalant", d: "Tenang / tidak peduli", s: "Cool"},
-                {w: "Pensive", d: "Melamun / berpikir", s: "Thoughtful"},
-                {w: "Quaint", d: "Unik / kuno menarik", s: "Charming"},
-                {w: "Scrutinize", d: "Memeriksa dengan teliti", s: "Analyze"}
-            ],
-            6: [
-                {w: "Tactful", d: "Sopan / penuh siasat", s: "Polite"},
-                {w: "Venerable", d: "Dihormati karena usia", s: "Respected"},
-                {w: "Wary", d: "Waspada / hati-hati", s: "Cautious"},
-                {w: "Zeal", d: "Semangat membara", s: "Passion"},
-                {w: "Affluence", d: "Kekayaan melimpah", s: "Wealth"},
-                {w: "Candid", d: "Jujur / apa adanya", s: "Frank"},
-                {w: "Disingenuous", d: "Tidak tulus / pura-pura", s: "Insincere"}
-            ],
-            7: [
-                {w: "Enigma", d: "Misteri / teka-teki", s: "Mystery"},
-                {w: "Facetious", d: "Bercanda di situasi serius", s: "Joking"},
-                {w: "Garrulous", d: "Sangat cerewet", s: "Chatty"},
-                {w: "Impeccable", d: "Sempurna tanpa cela", s: "Flawless"},
-                {w: "Juxtapose", d: "Menjajajarkan untuk kontras", s: "Compare"},
-                {w: "Mellifluous", d: "Suara merdu / manis", s: "Musical"},
-                {w: "Nefarious", d: "Jahat / keji", s: "Evil"}
-            ],
-            8: [
-                {w: "Obsequious", d: "Menjilat / terlalu patuh", s: "Servile"},
-                {w: "Pellucid", d: "Sangat jernih / bening", s: "Clear"},
-                {w: "Quixotic", d: "Idealistik tapi tidak nyata", s: "Dreamy"},
-                {w: "Recalcitrant", d: "Sangat pembangkang", s: "Unruly"},
-                {w: "Sycophant", d: "Penjilat demi keuntungan", s: "Flatterer"},
-                {w: "Trenchant", d: "Tajam dan jelas", s: "Sharp"},
-                {w: "Umbrage", d: "Rasa tersinggung", s: "Offense"}
-            ],
-            9: [
-                {w: "Vicissitude", d: "Perubahan nasib", s: "Change"},
-                {w: "Winsome", d: "Menawan / menarik", s: "Charming"},
-                {w: "Xenophobia", d: "Ketakutan pada orang asing", s: "Prejudice"},
-                {w: "Zenith", d: "Titik puncak / tertinggi", s: "Peak"},
-                {w: "Amnesty", d: "Pengampunan resmi", s: "Pardon"},
-                {w: "Brevity", d: "Keringkasan / singkat", s: "Shortness"},
-                {w: "Condone", d: "Memaafkan kesalahan", s: "Excuse"}
-            ],
-            10: [
-                {w: "Defenestration", d: "Melempar keluar jendela", s: "Expulsion"},
-                {w: "Egregious", d: "Sangat buruk / mencolok", s: "Flagrant"},
-                {w: "Floccinaucinihilipilification", d: "Menganggap sesuatu tidak berharga", s: "Belittling"},
-                {w: "Inscrutable", d: "Sulit dipahami", s: "Mysterious"},
-                {w: "Magnanimous", d: "Mulia / besar hati", s: "Noble"},
-                {w: "Obfuscate", d: "Membuat bingung / kabur", s: "Confuse"},
-                {w: "Sanguine", d: "Optimis / penuh harapan", s: "Hopeful"}
-            ]
+        // DATABASE KATA SESUAI LEVEL (1-10)
+        const db = {
+            1: {w:"Vibrant", d:"Penuh energi dan hidup", s:"Lively", ex:"The market was very Vibrant"},
+            2: {w:"Resilient", d:"Tangguh / Cepat pulih", s:"Strong", ex:"Maria is a Resilient student"},
+            3: {w:"Luminous", d:"Bercahaya terang", s:"Bright", ex:"The stars are Luminous tonight"},
+            4: {w:"Eloquent", d:"Fasih dan indah bicaranya", s:"Articulate", ex:"She gave an Eloquent speech"},
+            5: {w:"Serendipity", d:"Keberuntungan yang tidak sengaja", s:"Luck", ex:"Meeting you was Serendipity"},
+            6: {w:"Meticulous", d:"Sangat teliti & detail", s:"Precise", ex:"He is Meticulous in his work"},
+            7: {w:"Benevolent", d:"Baik hati & dermawan", s:"Kind", ex:"The king was Benevolent"},
+            8: {w:"Ephemeral", d:"Hanya tahan sebentar saja", s:"Transient", ex:"The sunset beauty is Ephemeral"},
+            9: {w:"Pragmatic", d:"Praktis dan realistis", s:"Practical", ex:"We need a Pragmatic solution"},
+            10: {w:"Zenith", d:"Titik puncak tertinggi", s:"Peak", ex:"The Zenith of his success"}
         };
 
-        let currentUser = "";
-        let data = { lvl: 1, score: 0, cor: 0, tot: 0 };
-        const levelNames = ["Novice", "Beginner", "Intermediate", "Advanced", "Expert", "Master I", "Master II", "Professional", "Elite", "Legendary"];
+        let user = "";
+        let stats = { score:0, l1:1, l2:1, l3:1 };
 
-        function userLogin() {
-            const name = document.getElementById('userNameInput').value.trim();
-            if(!name) return alert("Isi namamu!");
-            currentUser = name.toLowerCase();
-            document.getElementById('displayName').textContent = name;
+        function login() {
+            const n = document.getElementById('nameIn').value.trim();
+            if(!n) return alert("Tulis namamu dulu ya!");
+            user = n.toLowerCase();
+            document.getElementById('userDisp').textContent = n;
             document.getElementById('loginOverlay').style.display = "none";
-            const saved = localStorage.getItem('maria_user_' + currentUser);
-            if(saved) data = JSON.parse(saved);
+            const s = localStorage.getItem('maria_final_v3_'+user);
+            if(s) stats = JSON.parse(s);
             updateUI();
         }
 
         function updateUI() {
-            document.getElementById('statLevel').textContent = data.lvl;
-            document.getElementById('statScore').textContent = data.score;
-            document.getElementById('navScore').textContent = data.score;
-            const acc = data.tot > 0 ? Math.round((data.cor / data.tot) * 100) : 0;
-            document.getElementById('statAcc').textContent = acc + '%';
-            document.getElementById('progressBar').style.width = (data.lvl * 10) + '%';
-            document.getElementById('levelTextDisplay').textContent = `Level ${data.lvl}: ${levelNames[data.lvl-1]}`;
-        }
+            document.getElementById('navScore').textContent = stats.score;
+            document.getElementById('l1_val').textContent = stats.l1;
+            document.getElementById('l2_val').textContent = stats.l2;
+            document.getElementById('l3_val').textContent = stats.l3;
 
-        function openQuiz(startLvl) {
-            // Memilih level kosa kata yang dimainkan (berdasarkan level user saat ini)
-            const playLvl = data.lvl;
-            const questions = allVocab[playLvl] || allVocab[1];
-            const q = questions[Math.floor(Math.random() * questions.length)];
-            
-            // Mengacak pilihan jawaban
-            const options = [q.w, "Magnificent", "Tough", "Pure", "Clever"].sort(() => Math.random() - 0.5);
-            
-            document.getElementById('quizBody').innerHTML = `
-                <p style="color:var(--deep-violet); font-weight:bold;">Tantangan Level ${playLvl}</p>
-                <h2 style="margin:20px 0;">"${q.d}"</h2>
-                <div class="answer-options">
-                    ${options.map(opt => `<button class="answer-btn" onclick="check('${opt}', '${q.w}')">${opt}</button>`).join('')}
-                </div>
-            `;
-            document.getElementById('gameModal').classList.add('active');
-        }
-
-        function check(selected, correct) {
-            data.tot++;
-            const btns = document.querySelectorAll('.answer-btn');
-            btns.forEach(b => {
-                b.disabled = true;
-                if(b.textContent === correct) b.classList.add('correct');
-                if(b.textContent === selected && selected !== correct) b.classList.add('incorrect');
-            });
-
-            if(selected === correct) {
-                data.score += 20;
-                data.cor++;
-                if(data.lvl < 10) data.lvl++; // Naik level setiap jawaban benar untuk tes cepat
+            // Logika Gembok
+            if(stats.l1 >= 5) {
+                document.getElementById('card2').classList.remove('locked');
+                document.getElementById('lock2').style.display = 'none';
+                document.getElementById('hint2').textContent = "Ketik Sinonim Kata";
             }
-
-            localStorage.setItem('maria_user_' + currentUser, JSON.stringify(data));
-            updateUI();
-            setTimeout(closeModal, 1500);
+            if(stats.l2 >= 5) {
+                document.getElementById('card3').classList.remove('locked');
+                document.getElementById('lock3').style.display = 'none';
+                document.getElementById('hint3').textContent = "Lengkapi Kalimat";
+            }
+            localStorage.setItem('maria_final_v3_'+user, JSON.stringify(stats));
         }
 
-        function closeModal() { document.getElementById('gameModal').classList.remove('active'); }
+        function start(type) {
+            if(type === 2 && stats.l1 < 5) return alert("Mainkan Vocab Master sampai Level 5 dulu!");
+            if(type === 3 && stats.l2 < 5) return alert("Mainkan Word Link sampai Level 5 dulu!");
+
+            let cl = (type === 1) ? stats.l1 : (type === 2) ? stats.l2 : stats.l3;
+            if(cl > 10) return alert("Luar biasa! Kamu sudah menamatkan kategori ini.");
+
+            const q = db[cl];
+            const b = document.getElementById('mBody');
+            document.getElementById('gModal').classList.add('active');
+
+            if(type === 1) {
+                const opts = [q.w, "Gloomy", "Silent", "Rigid"].sort(()=>Math.random()-0.5);
+                b.innerHTML = `<h3>Vocab Lvl ${cl}</h3><p style="margin:20px 0; font-size:1.1rem;">"Apa bahasa Inggris dari: <b>${q.d}</b>?"</p>
+                    ${opts.map(o => `<button class="ans-btn" onclick="check(${type},'${o}','${q.w}')">${o}</button>`).join('')}`;
+            } else if(type === 2) {
+                b.innerHTML = `<h3>Word Link Lvl ${cl}</h3><p style="margin:20px 0">Ketik kata Inggris yang bermakna sama dengan: <br><strong>"${q.s}"</strong></p>
+                    <input type="text" id="i2" class="word-input" placeholder="Jawaban...">
+                    <button class="btn" onclick="check(${type},document.getElementById('i2').value,'${q.w}')">Verifikasi</button>`;
+            } else {
+                const h = q.ex.replace(new RegExp(q.w, 'gi'), "_______");
+                b.innerHTML = `<h3>Sentence Lvl ${cl}</h3><p style="margin:20px 0; font-style:italic;">"${h}"</p>
+                    <p style="font-size:0.9rem; color:#888;">Petunjuk: ${q.d}</p>
+                    <input type="text" id="i3" class="word-input" placeholder="Lengkapi...">
+                    <button class="btn" onclick="check(${type},document.getElementById('i3').value,'${q.w}')">Kirim</button>`;
+            }
+        }
+
+        function check(t, a, c) {
+            if(a.toLowerCase().trim() === c.toLowerCase()) {
+                alert("✨ HEBAT! Jawabanmu Benar. +20 Poin.");
+                stats.score += 20;
+                if(t===1) stats.l1++; if(t===2) stats.l2++; if(t===3) stats.l3++;
+            } else {
+                alert("❌ Masih Kurang Tepat. Jawabannya adalah: " + c);
+            }
+            updateUI();
+            document.getElementById('gModal').classList.remove('active');
+        }
     </script>
 </body>
 </html>

@@ -3,179 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 Maria Juliati Bloom Academy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <title>🌸 Maria's Violet Bloom Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f8c8dc 0%, #e6d6f5 100%); min-height: 100vh; padding-bottom: 50px; }
-        :root { --pink: #ff9aa2; --violet: #b19cd9; --deep: #7b68ee; --grad: linear-gradient(135deg, var(--pink), var(--violet)); }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); 
+            color: #4a148c; 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .container { max-width: 600px; margin: 0 auto; text-align: center; }
+        .navbar { background: white; padding: 15px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(123, 31, 162, 0.1); }
+        .logo { font-weight: 700; color: #7b1fa2; font-size: 1.2rem; }
 
-        /* Login */
-        #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .login-box { background: white; padding: 2.5rem; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; }
-        
-        /* Navbar */
-        .navbar { position: fixed; top: 0; width: 100%; background: white; padding: 1rem; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
-        .logo { font-family: 'Playfair Display', serif; font-weight: 700; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* Menu Utama */
+        .menu-grid { display: grid; gap: 15px; margin-top: 20px; }
+        .menu-btn { 
+            background: white; padding: 20px; border-radius: 25px; cursor: pointer; 
+            border: 2px solid #e1bee7; transition: 0.3s; 
+            display: flex; align-items: center; gap: 15px;
+        }
+        .menu-btn:hover { border-color: #7b1fa2; background: #f3e5f5; }
+        .menu-btn i { font-size: 2rem; color: #7b1fa2; }
 
-        .hero { padding: 120px 20px 40px; text-align: center; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #444; margin-bottom: 10px; }
-        
-        /* Games Grid */
-        .games-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 0 20px; }
-        .game-card { background: white; border-radius: 25px; padding: 2rem; text-align: center; cursor: pointer; transition: 0.3s; position: relative; border: 2px solid transparent; }
-        .game-card.locked { opacity: 0.6; filter: grayscale(1); cursor: not-allowed; }
-        .game-card:hover:not(.locked) { transform: translateY(-10px); border-color: var(--pink); box-shadow: 0 15px 35px rgba(177, 156, 217, 0.4); }
-        
-        .lock-icon { position: absolute; top: 20px; right: 20px; color: #888; }
-        .lvl-badge { background: var(--grad); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+        /* Area Game */
+        .game-area { display: none; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .active { display: block; }
 
-        /* Modal */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; padding: 2.5rem; border-radius: 30px; width: 90%; max-width: 500px; text-align: center; }
-        
-        .ans-btn { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #eee; background: white; border-radius: 15px; cursor: pointer; font-family: inherit; font-weight: 600; transition: 0.2s; }
-        .ans-btn:hover { border-color: var(--violet); background: #fdfbff; }
-        .word-input { width: 100%; padding: 15px; border: 2px solid var(--violet); border-radius: 15px; text-align: center; font-size: 1.3rem; margin: 20px 0; font-family: inherit; }
-        .btn { background: var(--grad); color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; font-weight: bold; }
+        /* TTS Grid */
+        .grid-tts { display: grid; grid-template-columns: repeat(5, 45px); gap: 5px; justify-content: center; margin: 20px 0; }
+        .cell { 
+            width: 45px; height: 45px; border: 2px solid #ce93d8; border-radius: 8px; 
+            text-align: center; font-weight: bold; font-size: 1.3rem; text-transform: uppercase;
+            background: #fdf7ff; color: #4a148c;
+        }
+        .cell.black { background: #4a148c; border: none; }
+
+        /* Scramble Style */
+        .scramble-word { font-size: 2.2rem; letter-spacing: 5px; color: #7b1fa2; font-weight: bold; margin: 25px 0; text-transform: uppercase; }
+        .input-text { width: 100%; padding: 15px; border: 2px solid #e1bee7; border-radius: 15px; text-align: center; font-size: 1.2rem; margin-bottom: 15px; outline: none; }
+
+        /* Memory Style */
+        .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .card { 
+            height: 80px; background: #ce93d8; border-radius: 15px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 0.8rem; font-weight: bold; color: transparent; transition: 0.4s;
+            text-align: center; padding: 5px;
+        }
+        .card.flipped { background: white; border: 2px solid #7b1fa2; color: #4a148c; }
+
+        .btn { 
+            background: linear-gradient(135deg, #7b1fa2, #ba68c8); color: white; 
+            border: none; padding: 15px 30px; border-radius: 30px; 
+            cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px;
+        }
+        .back-btn { background: #9e9e9e; margin-top: 25px; }
+        .stats { margin-bottom: 10px; font-weight: bold; color: #7b1fa2; }
     </style>
 </head>
 <body>
 
-    <div id="loginOverlay">
-        <div class="login-box">
-            <h2 style="font-family:'Playfair Display'">Maria's Bloom Academy</h2>
-            <p>Siapa yang sedang belajar?</p>
-            <input type="text" id="nameIn" style="width:100%; padding:12px; margin:20px 0; border-radius:12px; border:1px solid #ddd; text-align:center;" placeholder="Masukkan Nama...">
-            <button class="btn" onclick="login()">Buka Pintu Belajar</button>
+    <div class="container" id="mainMenu">
+        <div class="navbar"><div class="logo">🌸 Maria's Violet Bloom</div></div>
+        <p>Ayo Maria, taklukkan semua level!</p>
+        <div class="menu-grid">
+            <div class="menu-btn" onclick="showGame('tts')"><i class="fas fa-th-large"></i><div><strong>Crossword</strong><p style="font-size: 0.7rem;">TTS Mini 5x5</p></div></div>
+            <div class="menu-btn" onclick="showGame('scramble')"><i class="fas fa-random"></i><div><strong>Scramble</strong><p style="font-size: 0.7rem;">Susun Huruf Acak</p></div></div>
+            <div class="menu-btn" onclick="showGame('memory')"><i class="fas fa-brain"></i><div><strong>Memory</strong><p style="font-size: 0.7rem;">Pasangan Kata</p></div></div>
         </div>
     </div>
 
-    <nav class="navbar"><div class="nav-container"><a href="#" class="logo">🌸 Maria Juliati Bloom</a><div>⭐ <span id="navScore">0</span></div></div></nav>
-
-    <div class="hero">
-        <h1>Welcome, <span id="userDisp">Maria</span>!</h1>
-        <p>Buka <b>Word Link</b> di Level 5 Vocab, Buka <b>Sentence</b> di Level 5 Word Link.</p>
+    <!-- GAME 1: TTS -->
+    <div class="container game-area" id="game_tts">
+        <div class="stats">Teka-Teki Level: <span id="ttsLevelDisp">1</span></div>
+        <div id="ttsClues" style="text-align: left; background: #f3e5f5; padding: 15px; border-radius: 15px;"></div>
+        <div class="grid-tts" id="ttsGrid"></div>
+        <button class="btn" onclick="checkTTS()">CEK JAWABAN</button>
+        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
     </div>
 
-    <div class="games-grid">
-        <div class="game-card" id="card1" onclick="start(1)">
-            <div class="lvl-badge">Level <span id="l1_val">1</span>/10</div>
-            <i class="fas fa-brain" style="color:var(--pink); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
-            <h3>Vocab Master</h3>
-            <p>Tebak Arti Kata</p>
-        </div>
-
-        <div class="game-card locked" id="card2" onclick="start(2)">
-            <div class="lock-icon" id="lock2"><i class="fas fa-lock"></i></div>
-            <div class="lvl-badge">Level <span id="l2_val">1</span>/10</div>
-            <i class="fas fa-keyboard" style="color:var(--violet); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
-            <h3>Word Link</h3>
-            <p id="hint2">Terkunci (Butuh Vocab Lvl 5)</p>
-        </div>
-
-        <div class="game-card locked" id="card3" onclick="start(3)">
-            <div class="lock-icon" id="lock3"><i class="fas fa-lock"></i></div>
-            <div class="lvl-badge">Level <span id="l3_val">1</span>/10</div>
-            <i class="fas fa-spell-check" style="color:var(--deep); font-size: 3.5rem; margin: 15px 0; display: block;"></i>
-            <h3>Sentence Craft</h3>
-            <p id="hint3">Terkunci (Butuh Word Lvl 5)</p>
-        </div>
+    <!-- GAME 2: SCRAMBLE -->
+    <div class="container game-area" id="game_scramble">
+        <div class="stats">Scramble Level: <span id="scrambleLevelDisp">1</span></div>
+        <div class="scramble-word" id="scrambleText"></div>
+        <p id="scrambleHint" style="color: #666; font-style: italic;"></p>
+        <input type="text" id="scrambleInput" class="input-text" placeholder="Jawabanmu...">
+        <button class="btn" onclick="checkScramble()">KIRIM JAWABAN</button>
+        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
     </div>
 
-    <div id="gModal" class="modal"><div class="modal-content" id="mBody"></div></div>
+    <!-- GAME 3: MEMORY -->
+    <div class="container game-area" id="game_memory">
+        <div class="stats">Pasangkan Kata & Arti</div>
+        <div class="memory-grid" id="memoryGrid"></div>
+        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
+    </div>
 
     <script>
-        // DATABASE KATA SESUAI LEVEL (1-10)
-        const db = {
-            1: {w:"Vibrant", d:"Penuh energi dan hidup", s:"Lively", ex:"The market was very Vibrant"},
-            2: {w:"Resilient", d:"Tangguh / Cepat pulih", s:"Strong", ex:"Maria is a Resilient student"},
-            3: {w:"Luminous", d:"Bercahaya terang", s:"Bright", ex:"The stars are Luminous tonight"},
-            4: {w:"Eloquent", d:"Fasih dan indah bicaranya", s:"Articulate", ex:"She gave an Eloquent speech"},
-            5: {w:"Serendipity", d:"Keberuntungan yang tidak sengaja", s:"Luck", ex:"Meeting you was Serendipity"},
-            6: {w:"Meticulous", d:"Sangat teliti & detail", s:"Precise", ex:"He is Meticulous in his work"},
-            7: {w:"Benevolent", d:"Baik hati & dermawan", s:"Kind", ex:"The king was Benevolent"},
-            8: {w:"Ephemeral", d:"Hanya tahan sebentar saja", s:"Transient", ex:"The sunset beauty is Ephemeral"},
-            9: {w:"Pragmatic", d:"Praktis dan realistis", s:"Practical", ex:"We need a Pragmatic solution"},
-            10: {w:"Zenith", d:"Titik puncak tertinggi", s:"Peak", ex:"The Zenith of his success"}
-        };
+        // --- DATABASE KOSA KATA ---
+        const ttsData = [
+            { lvl: 1, d: "LIGHT", m: "LOVE", hintD: "Bercahaya (L...)", hintM: "Kasih (L...)" },
+            { lvl: 2, d: "SMART", m: "SMALL", hintD: "Pintar (S...)", hintM: "Kecil (S...)" },
+            { lvl: 3, d: "BRAVE", m: "BRIGHT", hintD: "Berani (B...)", hintM: "Cerdas/Terang (B...)" }
+        ];
 
-        let user = "";
-        let stats = { score:0, l1:1, l2:1, l3:1 };
+        const scrambleData = [
+            { w: "RESILIENT", h: "Tangguh / Bangkit kembali" },
+            { w: "VIBRANT", h: "Penuh energi / Bersemangat" },
+            { w: "ELOQUENT", h: "Fasih berbicara" },
+            { w: "PRAGMATIC", h: "Praktis / Nyata" },
+            { w: "SERENDIPITY", h: "Keberuntungan tak terduga" },
+            { w: "EPHEMERAL", h: "Sangat singkat / Sebentar" },
+            { w: "TENACIOUS", h: "Gigih / Tak menyerah" },
+            { w: "METICULOUS", h: "Sangat teliti" }
+        ];
 
-        function login() {
-            const n = document.getElementById('nameIn').value.trim();
-            if(!n) return alert("Tulis namamu dulu ya!");
-            user = n.toLowerCase();
-            document.getElementById('userDisp').textContent = n;
-            document.getElementById('loginOverlay').style.display = "none";
-            const s = localStorage.getItem('maria_final_v3_'+user);
-            if(s) stats = JSON.parse(s);
-            updateUI();
+        const memoryPairs = [
+            ['Zenith', 'Puncak'], ['Luck', 'Untung'], ['Smart', 'Pintar'],
+            ['Strong', 'Kuat'], ['Bright', 'Terang'], ['Bold', 'Berani'],
+            ['Kind', 'Baik'], ['Quick', 'Cepat'], ['Happy', 'Senang']
+        ];
+
+        let curLvlTTS = 0;
+        let curLvlScramble = 0;
+        let flipped = [];
+
+        function showGame(game) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
+            document.getElementById('game_' + game).classList.add('active');
+            if(game === 'tts') initTTS();
+            if(game === 'scramble') initScramble();
+            if(game === 'memory') initMemory();
         }
 
-        function updateUI() {
-            document.getElementById('navScore').textContent = stats.score;
-            document.getElementById('l1_val').textContent = stats.l1;
-            document.getElementById('l2_val').textContent = stats.l2;
-            document.getElementById('l3_val').textContent = stats.l3;
-
-            // Logika Gembok
-            if(stats.l1 >= 5) {
-                document.getElementById('card2').classList.remove('locked');
-                document.getElementById('lock2').style.display = 'none';
-                document.getElementById('hint2').textContent = "Ketik Sinonim Kata";
-            }
-            if(stats.l2 >= 5) {
-                document.getElementById('card3').classList.remove('locked');
-                document.getElementById('lock3').style.display = 'none';
-                document.getElementById('hint3').textContent = "Lengkapi Kalimat";
-            }
-            localStorage.setItem('maria_final_v3_'+user, JSON.stringify(stats));
+        function goHome() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
         }
 
-        function start(type) {
-            if(type === 2 && stats.l1 < 5) return alert("Mainkan Vocab Master sampai Level 5 dulu!");
-            if(type === 3 && stats.l2 < 5) return alert("Mainkan Word Link sampai Level 5 dulu!");
-
-            let cl = (type === 1) ? stats.l1 : (type === 2) ? stats.l2 : stats.l3;
-            if(cl > 10) return alert("Luar biasa! Kamu sudah menamatkan kategori ini.");
-
-            const q = db[cl];
-            const b = document.getElementById('mBody');
-            document.getElementById('gModal').classList.add('active');
-
-            if(type === 1) {
-                const opts = [q.w, "Gloomy", "Silent", "Rigid"].sort(()=>Math.random()-0.5);
-                b.innerHTML = `<h3>Vocab Lvl ${cl}</h3><p style="margin:20px 0; font-size:1.1rem;">"Apa bahasa Inggris dari: <b>${q.d}</b>?"</p>
-                    ${opts.map(o => `<button class="ans-btn" onclick="check(${type},'${o}','${q.w}')">${o}</button>`).join('')}`;
-            } else if(type === 2) {
-                b.innerHTML = `<h3>Word Link Lvl ${cl}</h3><p style="margin:20px 0">Ketik kata Inggris yang bermakna sama dengan: <br><strong>"${q.s}"</strong></p>
-                    <input type="text" id="i2" class="word-input" placeholder="Jawaban...">
-                    <button class="btn" onclick="check(${type},document.getElementById('i2').value,'${q.w}')">Verifikasi</button>`;
-            } else {
-                const h = q.ex.replace(new RegExp(q.w, 'gi'), "_______");
-                b.innerHTML = `<h3>Sentence Lvl ${cl}</h3><p style="margin:20px 0; font-style:italic;">"${h}"</p>
-                    <p style="font-size:0.9rem; color:#888;">Petunjuk: ${q.d}</p>
-                    <input type="text" id="i3" class="word-input" placeholder="Lengkapi...">
-                    <button class="btn" onclick="check(${type},document.getElementById('i3').value,'${q.w}')">Kirim</button>`;
+        // --- TTS LOGIC ---
+        function initTTS() {
+            const data = ttsData[curLvlTTS];
+            document.getElementById('ttsLevelDisp').innerText = data.lvl;
+            document.getElementById('ttsClues').innerHTML = `<p><strong>Mendatar:</strong> ${data.hintD}</p><p><strong>Menurun:</strong> ${data.hintM}</p>`;
+            const grid = document.getElementById('ttsGrid');
+            grid.innerHTML = '';
+            for(let i=0; i<25; i++) {
+                const cell = document.createElement('input');
+                cell.className = 'cell'; cell.maxLength = 1; cell.id = 't' + i;
+                // Simple pattern for 5x5 crossword (Baris 1 & Kolom 1)
+                if(i > 4 && i % 5 !== 0) { cell.classList.add('black'); cell.disabled = true; }
+                grid.appendChild(cell);
             }
         }
 
-        function check(t, a, c) {
-            if(a.toLowerCase().trim() === c.toLowerCase()) {
-                alert("✨ HEBAT! Jawabanmu Benar. +20 Poin.");
-                stats.score += 20;
-                if(t===1) stats.l1++; if(t===2) stats.l2++; if(t===3) stats.l3++;
-            } else {
-                alert("❌ Masih Kurang Tepat. Jawabannya adalah: " + c);
-            }
-            updateUI();
-            document.getElementById('gModal').classList.remove('active');
+        function checkTTS() {
+            const data = ttsData[curLvlTTS];
+            const dAns = (document.getElementById('t0').value + document.getElementById('t1').value + document.getElementById('t2').value + document.getElementById('t3').value + document.getElementById('t4').value).toUpperCase();
+            const mAns = (document.getElementById('t0').value + document.getElementById('t5').value + document.getElementById('t10').value + document.getElementById('t15').value + (document.getElementById('t20') ? document.getElementById('t20').value : "")).toUpperCase().substring(0, data.m.length);
+
+            if(dAns === data.d && mAns === data.m) {
+                alert("✨ LEVEL SELESAI!");
+                curLvlTTS++;
+                if(curLvlTTS < ttsData.length) initTTS();
+                else alert("Maria tamat semua TTS!");
+            } else { alert("Coba cek lagi ya!"); }
+        }
+
+        // --- SCRAMBLE LOGIC ---
+        function initScramble() {
+            const data = scrambleData[curLvlScramble];
+            document.getElementById('scrambleLevelDisp').innerText = (curLvlScramble + 1);
+            let s = data.w.split('').sort(()=>Math.random()-0.5).join(' ');
+            document.getElementById('scrambleText').innerText = s;
+            document.getElementById('scrambleHint').innerText = "Hint: " + data.h;
+            document.getElementById('scrambleInput').value = "";
+        }
+
+        function checkScramble() {
+            const ans = document.getElementById('scrambleInput').value.toUpperCase().trim();
+            if(ans === scrambleData[curLvlScramble].w) {
+                alert("✨ BENAR!");
+                curLvlScramble++;
+                if(curLvlScramble < scrambleData.length) initScramble();
+                else alert("Hebat! Semua kosa kata Scramble selesai.");
+            } else { alert("Susunannya masih salah, Maria."); }
+        }
+
+        // --- MEMORY LOGIC ---
+        function initMemory() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            const flat = memoryPairs.flat().sort(()=>Math.random()-0.5);
+            flat.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card'; card.textContent = item;
+                card.onclick = () => {
+                    if(flipped.length < 2 && !card.classList.contains('flipped')) {
+                        card.classList.add('flipped');
+                        flipped.push(card);
+                        if(flipped.length === 2) setTimeout(checkMemory, 800);
+                    }
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function checkMemory() {
+            const [c1, c2] = flipped;
+            let match = false;
+            memoryPairs.forEach(p => {
+                if((p[0] === c1.textContent && p[1] === c2.textContent) || (p[1] === c1.textContent && p[0] === c2.textContent)) match = true;
+            });
+            if(match) { c1.style.visibility = 'hidden'; c2.style.visibility = 'hidden'; }
+            else { c1.classList.remove('flipped'); c2.classList.remove('flipped'); }
+            flipped = [];
         }
     </script>
 </body>
-</html>    
+</html>

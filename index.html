@@ -1,229 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 Maria's Bloom Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); 
-            color: #4a148c; 
-            min-height: 100vh; 
-            padding: 20px; 
-        }
-        .container { max-width: 600px; margin: 0 auto; text-align: center; }
-        .navbar { background: white; padding: 15px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(123, 31, 162, 0.1); }
-        .logo { font-weight: 700; color: #7b1fa2; font-size: 1.2rem; }
-
-        /* Menu Utama */
-        .menu-grid { display: grid; gap: 15px; margin-top: 20px; }
-        .menu-btn { 
-            background: white; padding: 20px; border-radius: 25px; cursor: pointer; 
-            border: 2px solid #e1bee7; transition: 0.3s; 
-            display: flex; align-items: center; gap: 15px;
-        }
-        .menu-btn:hover { border-color: #7b1fa2; background: #f3e5f5; }
-        .menu-btn i { font-size: 2rem; color: #7b1fa2; }
-
-        /* Area Game */
-        .game-area { display: none; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .active { display: block; }
-
-        /* TTS Grid */
-        .grid-tts { display: grid; grid-template-columns: repeat(5, 45px); gap: 5px; justify-content: center; margin: 20px 0; }
-        .cell { 
-            width: 45px; height: 45px; border: 2px solid #ce93d8; border-radius: 8px; 
-            text-align: center; font-weight: bold; font-size: 1.3rem; text-transform: uppercase;
-            background: #fdf7ff; color: #4a148c;
-        }
-        .cell.black { background: #4a148c; border: none; }
-
-        /* Scramble Style */
-        .scramble-word { font-size: 2.2rem; letter-spacing: 5px; color: #7b1fa2; font-weight: bold; margin: 25px 0; text-transform: uppercase; }
-        .input-text { width: 100%; padding: 15px; border: 2px solid #e1bee7; border-radius: 15px; text-align: center; font-size: 1.2rem; margin-bottom: 15px; outline: none; }
-
-        /* Memory Style */
-        .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .card { 
-            height: 80px; background: #ce93d8; border-radius: 15px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; font-size: 0.8rem; font-weight: bold; color: transparent; transition: 0.4s;
-            text-align: center; padding: 5px;
-        }
-        .card.flipped { background: white; border: 2px solid #7b1fa2; color: #4a148c; }
-
-        .btn { 
-            background: linear-gradient(135deg, #7b1fa2, #ba68c8); color: white; 
-            border: none; padding: 15px 30px; border-radius: 30px; 
-            cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px;
-        }
-        .back-btn { background: #9e9e9e; margin-top: 25px; }
-        .stats { margin-bottom: 10px; font-weight: bold; color: #7b1fa2; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VocabMaster — Learn English</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="code.js"></script>
+<link rel="stylesheet" href="code.css">
 </head>
 <body>
+<div class="blobs"><div class="bl"></div><div class="bl"></div><div class="bl"></div></div>
 
-    <div class="container" id="mainMenu">
-        <div class="navbar"><div class="logo">🌸 Maria's Violet Bloom</div></div>
-        <p>Ayo Maria, taklukkan semua level!</p>
-        <div class="menu-grid">
-            <div class="menu-btn" onclick="showGame('tts')"><i class="fas fa-th-large"></i><div><strong>Crossword</strong><p style="font-size: 0.7rem;">TTS Mini 5x5</p></div></div>
-            <div class="menu-btn" onclick="showGame('scramble')"><i class="fas fa-random"></i><div><strong>Scramble</strong><p style="font-size: 0.7rem;">Susun Huruf Acak</p></div></div>
-            <div class="menu-btn" onclick="showGame('memory')"><i class="fas fa-brain"></i><div><strong>Memory</strong><p style="font-size: 0.7rem;">Pasangan Kata</p></div></div>
-        </div>
+<div id="loginPage">
+    <div class="lcard">
+    <div class="llogo">Vocab<span>Master</span></div>
+    <div class="lsub">Platform belajar Bahasa Inggris interaktif</div>
+    <div class="ltabs">
+        <button class="ltab on" data-t="login">Masuk</button>
+        <button class="ltab" data-t="register">Daftar</button>
     </div>
-
-    <!-- GAME 1: TTS -->
-    <div class="container game-area" id="game_tts">
-        <div class="stats">Teka-Teki Level: <span id="ttsLevelDisp">1</span></div>
-        <div id="ttsClues" style="text-align: left; background: #f3e5f5; padding: 15px; border-radius: 15px;"></div>
-        <div class="grid-tts" id="ttsGrid"></div>
-        <button class="btn" onclick="checkTTS()">CEK JAWABAN</button>
-        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
+    <div id="loginForm">
+        <div class="lfield"><label>Username</label><input type="text" id="lUser" placeholder="Masukkan username" autocomplete="username"></div>
+        <div class="lfield"><label>Password</label><input type="password" id="lPass" placeholder="Masukkan password" autocomplete="current-password"><button class="eye" type="button" data-target="lPass"><i class="fas fa-eye"></i></button></div>
+        <div class="lerr" id="lErr"></div>
+        <button class="lbtn" id="lBtn">Masuk</button>
     </div>
-
-    <!-- GAME 2: SCRAMBLE -->
-    <div class="container game-area" id="game_scramble">
-        <div class="stats">Scramble Level: <span id="scrambleLevelDisp">1</span></div>
-        <div class="scramble-word" id="scrambleText"></div>
-        <p id="scrambleHint" style="color: #666; font-style: italic;"></p>
-        <input type="text" id="scrambleInput" class="input-text" placeholder="Jawabanmu...">
-        <button class="btn" onclick="checkScramble()">KIRIM JAWABAN</button>
-        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
+    <div id="regForm" style="display:none">
+        <div class="lfield"><label>Username</label><input type="text" id="rUser" placeholder="Buat username (min 3 karakter)" autocomplete="username"></div>
+        <div class="lfield"><label>Password</label><input type="password" id="rPass" placeholder="Buat password (min 4 karakter)" autocomplete="new-password"><button class="eye" type="button" data-target="rPass"><i class="fas fa-eye"></i></button></div>
+        <div class="lfield"><label>Konfirmasi Password</label><input type="password" id="rConf" placeholder="Ulangi password" autocomplete="new-password"></div>
+        <div class="lerr" id="rErr"></div>
+        <button class="lbtn" id="rBtn">Daftar</button>
     </div>
-
-    <!-- GAME 3: MEMORY -->
-    <div class="container game-area" id="game_memory">
-        <div class="stats">Pasangkan Kata & Arti</div>
-        <div class="memory-grid" id="memoryGrid"></div>
-        <button class="btn back-btn" onclick="goHome()">Menu Utama</button>
+    <div class="lnote"><i class="fas fa-lock" style="margin-right:4px"></i>Progress tersimpan otomatis di browser ini</div>
     </div>
+</div>
 
-    <script>
-        // --- DATABASE KOSA KATA ---
-        const ttsData = [
-            { lvl: 1, d: "LIGHT", m: "LOVE", hintD: "Bercahaya (L...)", hintM: "Kasih (L...)" },
-            { lvl: 2, d: "SMART", m: "SMALL", hintD: "Pintar (S...)", hintM: "Kecil (S...)" },
-            { lvl: 3, d: "BRAVE", m: "BRIGHT", hintD: "Berani (B...)", hintM: "Cerdas/Terang (B...)" }
-        ];
+<div id="appPage" style="display:none">
+    <header class="app-h">
+    <div class="hlogo">Vocab<span>Master</span></div>
+    <div class="hright">
+        <div class="hxp"><i class="fas fa-star"></i><span id="hXp">0</span></div>
+        <div class="hstreak"><i class="fas fa-fire"></i><span id="hSt">0</span></div>
+        <div class="huser" id="hUser">User</div>
+        <button class="hout" id="hOut" aria-label="Keluar"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+    </header>
+    <main class="app-m">
+    <div id="vDash" class="view on"></div>
+    <div id="vQuiz" class="view"></div>
+    <div id="vMatch" class="view"></div>
+    <div id="vError" class="view"></div>
+    </main>
+</div>
 
-        const scrambleData = [
-            { w: "RESILIENT", h: "Tangguh / Bangkit kembali" },
-            { w: "VIBRANT", h: "Penuh energi / Bersemangat" },
-            { w: "ELOQUENT", h: "Fasih berbicara" },
-            { w: "PRAGMATIC", h: "Praktis / Nyata" },
-            { w: "SERENDIPITY", h: "Keberuntungan tak terduga" },
-            { w: "EPHEMERAL", h: "Sangat singkat / Sebentar" },
-            { w: "TENACIOUS", h: "Gigih / Tak menyerah" },
-            { w: "METICULOUS", h: "Sangat teliti" }
-        ];
+<div class="toasts" id="toasts"></div>
 
-        const memoryPairs = [
-            ['Zenith', 'Puncak'], ['Luck', 'Untung'], ['Smart', 'Pintar'],
-            ['Strong', 'Kuat'], ['Bright', 'Terang'], ['Bold', 'Berani'],
-            ['Kind', 'Baik'], ['Quick', 'Cepat'], ['Happy', 'Senang']
-        ];
-
-        let curLvlTTS = 0;
-        let curLvlScramble = 0;
-        let flipped = [];
-
-        function showGame(game) {
-            document.getElementById('mainMenu').style.display = 'none';
-            document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
-            document.getElementById('game_' + game).classList.add('active');
-            if(game === 'tts') initTTS();
-            if(game === 'scramble') initScramble();
-            if(game === 'memory') initMemory();
-        }
-
-        function goHome() {
-            document.getElementById('mainMenu').style.display = 'block';
-            document.querySelectorAll('.game-area').forEach(a => a.classList.remove('active'));
-        }
-
-        // --- TTS LOGIC ---
-        function initTTS() {
-            const data = ttsData[curLvlTTS];
-            document.getElementById('ttsLevelDisp').innerText = data.lvl;
-            document.getElementById('ttsClues').innerHTML = `<p><strong>Mendatar:</strong> ${data.hintD}</p><p><strong>Menurun:</strong> ${data.hintM}</p>`;
-            const grid = document.getElementById('ttsGrid');
-            grid.innerHTML = '';
-            for(let i=0; i<25; i++) {
-                const cell = document.createElement('input');
-                cell.className = 'cell'; cell.maxLength = 1; cell.id = 't' + i;
-                // Simple pattern for 5x5 crossword (Baris 1 & Kolom 1)
-                if(i > 4 && i % 5 !== 0) { cell.classList.add('black'); cell.disabled = true; }
-                grid.appendChild(cell);
-            }
-        }
-
-        function checkTTS() {
-            const data = ttsData[curLvlTTS];
-            const dAns = (document.getElementById('t0').value + document.getElementById('t1').value + document.getElementById('t2').value + document.getElementById('t3').value + document.getElementById('t4').value).toUpperCase();
-            const mAns = (document.getElementById('t0').value + document.getElementById('t5').value + document.getElementById('t10').value + document.getElementById('t15').value + (document.getElementById('t20') ? document.getElementById('t20').value : "")).toUpperCase().substring(0, data.m.length);
-
-            if(dAns === data.d && mAns === data.m) {
-                alert("✨ LEVEL SELESAI!");
-                curLvlTTS++;
-                if(curLvlTTS < ttsData.length) initTTS();
-                else alert("Maria tamat semua TTS!");
-            } else { alert("Coba cek lagi ya!"); }
-        }
-
-        // --- SCRAMBLE LOGIC ---
-        function initScramble() {
-            const data = scrambleData[curLvlScramble];
-            document.getElementById('scrambleLevelDisp').innerText = (curLvlScramble + 1);
-            let s = data.w.split('').sort(()=>Math.random()-0.5).join(' ');
-            document.getElementById('scrambleText').innerText = s;
-            document.getElementById('scrambleHint').innerText = "Hint: " + data.h;
-            document.getElementById('scrambleInput').value = "";
-        }
-
-        function checkScramble() {
-            const ans = document.getElementById('scrambleInput').value.toUpperCase().trim();
-            if(ans === scrambleData[curLvlScramble].w) {
-                alert("✨ BENAR!");
-                curLvlScramble++;
-                if(curLvlScramble < scrambleData.length) initScramble();
-                else alert("Hebat! Semua kosa kata Scramble selesai.");
-            } else { alert("Susunannya masih salah, Maria."); }
-        }
-
-        // --- MEMORY LOGIC ---
-        function initMemory() {
-            const grid = document.getElementById('memoryGrid');
-            grid.innerHTML = '';
-            const flat = memoryPairs.flat().sort(()=>Math.random()-0.5);
-            flat.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card'; card.textContent = item;
-                card.onclick = () => {
-                    if(flipped.length < 2 && !card.classList.contains('flipped')) {
-                        card.classList.add('flipped');
-                        flipped.push(card);
-                        if(flipped.length === 2) setTimeout(checkMemory, 800);
-                    }
-                };
-                grid.appendChild(card);
-            });
-        }
-
-        function checkMemory() {
-            const [c1, c2] = flipped;
-            let match = false;
-            memoryPairs.forEach(p => {
-                if((p[0] === c1.textContent && p[1] === c2.textContent) || (p[1] === c1.textContent && p[0] === c2.textContent)) match = true;
-            });
-            if(match) { c1.style.visibility = 'hidden'; c2.style.visibility = 'hidden'; }
-            else { c1.classList.remove('flipped'); c2.classList.remove('flipped'); }
-            flipped = [];
-        }
-    </script>
 </body>
 </html>

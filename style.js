@@ -180,9 +180,9 @@ function initLogin(){
     var u=document.getElementById("lUser").value.trim();
     var p=document.getElementById("lPass").value;
     var err=document.getElementById("lErr");
-    if(!u||!p){err.textContent="Username dan password harus diisi.";return;}
-    if(!users[u]){err.textContent="Username tidak ditemukan.";return;}
-    if(users[u].pw!==p){err.textContent="Password salah.";return;}
+    if(!u||!p){err.textContent="Username and pasword are required.";return;}
+    if(!users[u]){err.textContent="Username not found.";return;}
+    if(users[u].pw!==p){err.textContent="Incorrect Password.";return;}
     curUser=u;
     try{localStorage.setItem("vm_cur",u);}catch(e){}
     updStreak();showApp();
@@ -193,15 +193,15 @@ function initLogin(){
     var p=document.getElementById("rPass").value;
     var cf=document.getElementById("rConf").value;
     var err=document.getElementById("rErr");
-    if(u.length<3){err.textContent="Username minimal 3 karakter.";return;}
-    if(p.length<4){err.textContent="Password minimal 4 karakter.";return;}
-    if(p!==cf){err.textContent="Konfirmasi password tidak cocok.";return;}
-    if(users[u]){err.textContent="Username sudah digunakan.";return;}
+    if(u.length<3){err.textContent="Username must be at least 3 characters.";return;}
+    if(p.length<4){err.textContent="Password must be atleast 4 characters.";return;}
+    if(p!==cf){err.textContent="Password confirmation does not match .";return;}
+    if(users[u]){err.textContent="Username already axists.";return;}
     users[u]={pw:p,xp:0,streak:0,lastDate:"",qBest:0,mBest:999,eBest:0,qPlay:0,mPlay:0,ePlay:0};
     saveUsers();
     curUser=u;
     try{localStorage.setItem("vm_cur",u);}catch(e){}
-    toast("Akun berhasil dibuat!","ok");
+    toast("Account created successfully!","ok");
     updStreak();showApp();
     };
 
@@ -222,30 +222,30 @@ function renderDash(){
     var u=getUser();if(!u)return;
     var totalG=(u.qPlay||0)+(u.mPlay||0)+(u.ePlay||0);
     var qBestTxt = u.qBest>0 ? String(u.qBest) : "-";
-    var mBestTxt = u.mBest<999 ? u.mBest+" langkah" : "-";
+    var mBestTxt = u.mBest<999 ? u.mBest+" moves" : "-";
     var eBestTxt = u.eBest>0 ? u.eBest+"/8" : "-";
-    var qPlayTxt = u.qPlay>0 ? u.qPlay+"x" : "Belum";
-    var mPlayTxt = u.mPlay>0 ? u.mPlay+"x" : "Belum";
-    var ePlayTxt = u.ePlay>0 ? u.ePlay+"x" : "Belum";
+    var qPlayTxt = u.qPlay>0 ? u.qPlay+"x" : "Not yet";
+    var mPlayTxt = u.mPlay>0 ? u.mPlay+"x" : "Not yet";
+    var ePlayTxt = u.ePlay>0 ? u.ePlay+"x" : "Not yet";
 
     var el=document.getElementById("vDash");
     el.innerHTML = '<div class="dash-w">'
-    +'<div class="dash-greet"><h1>Halo, <span>'+curUser+'</span></h1>'
-    +'<p>Pilih permainan untuk mulai belajar</p></div>'
+    +'<div class="dash-greet"><h1>Hello, <span>'+curUser+'</span></h1>'
+    +'<p>Choose a game to start learning</p></div>'
     +'<div class="stats-row">'
     +'<div class="st-card"><div class="sv xpc">'+u.xp+'</div><div class="sl">Total XP</div></div>'
-    +'<div class="st-card"><div class="sv stc">'+u.streak+'</div><div class="sl">Hari Streak</div></div>'
-    +'<div class="st-card"><div class="sv gmc">'+totalG+'</div><div class="sl">Total Permainan</div></div>'
+    +'<div class="st-card"><div class="sv stc">'+u.streak+'</div><div class="sl">Streak Days</div></div>'
+    +'<div class="st-card"><div class="sv gmc">'+totalG+'</div><div class="sl">Total Games</div></div>'
     +'</div>'
     +'<div class="game-grid">'
 
     +'<div class="gc" id="gcQuiz">'
     +'<div class="gc-icon qi"><i class="fas fa-bolt"></i></div>'
     +'<h3>Vocabulary Quiz</h3>'
-    +'<p>Pilih arti yang benar dari kata yang ditampilkan. Jawab cepat untuk bonus XP!</p>'
+    +'<p>Select the correct meaning. Each Correct answer = 10 XP</p>'
     +'<div class="gc-stats">'
     +'<span><i class="fas fa-trophy"></i> Best: '+qBestTxt+'</span>'
-    +'<span><i class="fas fa-gamepad"></i> '+qPlayTxt+'</span>'
+    +'<span><i class="fas fa-gamepad"></i> Played : '+qPlayTxt+'</span>'
     +'</div>'
     +'<button class="gc-play"><i class="fas fa-play"></i> Main Quiz</button>'
     +'</div>'
@@ -253,10 +253,10 @@ function renderDash(){
     +'<div class="gc" id="gcMatch">'
     +'<div class="gc-icon mi"><i class="fas fa-puzzle-piece"></i></div>'
     +'<h3>Match Game</h3>'
-    +'<p>Cocokkan kata Inggris dengan arti Indonesia secepat mungkin!</p>'
+    +'<p>Match English words with their meanings</p>'
     +'<div class="gc-stats">'
     +'<span><i class="fas fa-trophy"></i> Best: '+mBestTxt+'</span>'
-    +'<span><i class="fas fa-gamepad"></i> '+mPlayTxt+'</span>'
+    +'<span><i class="fas fa-gamepad"></i> Played : '+mPlayTxt+'</span>'
     +'</div>'
     +'<button class="gc-play mp"><i class="fas fa-play"></i> Main Match</button>'
     +'</div>'
@@ -264,10 +264,10 @@ function renderDash(){
     +'<div class="gc" id="gcError">'
     +'<div class="gc-icon ei"><i class="fas fa-search"></i></div>'
     +'<h3>Error Recognition</h3>'
-    +'<p>Temukan kata yang salah dalam kalimat. Latih grammar dan tenses!</p>'
+    +'<p>Find the incorrect word in the sentence.</p>'
     +'<div class="gc-stats">'
     +'<span><i class="fas fa-trophy"></i> Best: '+eBestTxt+'</span>'
-    +'<span><i class="fas fa-gamepad"></i> '+ePlayTxt+'</span>'
+    +'<span><i class="fas fa-gamepad"></i> Played : '+ePlayTxt+'</span>'
     +'</div>'
     +'<button class="gc-play ep"><i class="fas fa-play"></i> Main Error</button>'
     +'</div>'
@@ -342,13 +342,13 @@ function renderQZ(){
     el.appendChild(mkBack("Dashboard"));
 
     var wrap=document.createElement("div");wrap.className="qz-w";
-    wrap.innerHTML='<div class="gvh"><h2>Vocabulary Quiz</h2><p>Pilih arti yang benar</p></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Vocabulary Quiz</h2><p>Choose the correct answer</p></div>'
     +'<div class="qz-hd"><span class="qz-sc"><i class="fas fa-star" style="margin-right:4px"></i>'+S.qzSc+'</span>'
     +'<span class="qz-tm" id="qzTi"><i class="fas fa-clock"></i><span id="qzTn">'+S.qzT+'</span>s</span></div>'
     +'<div class="qz-pb"><div class="qz-pf" style="width:'+pct+'%"></div></div>'
-    +'<div class="qz-qn">Pertanyaan '+(S.qzI+1)+' dari '+S.qzQ.length+'</div>'
+    +'<div class="qz-qn">Question '+(S.qzI+1)+' dari '+S.qzQ.length+'</div>'
     +'<div class="qz-wd">'+q.word+'</div>'
-    +'<button class="qz-sp" id="qzSp"><i class="fas fa-volume-up"></i> Dengarkan</button>'
+    +'<button class="qz-sp" id="qzSp"><i class="fas fa-volume-up"></i> Listen</button>'
     +'<div class="qz-opts" id="qzOpts"></div>';
     el.appendChild(wrap);
 
@@ -389,7 +389,7 @@ function ansQZ(btn){
            var bonusXP= S.qzT>=7?5:S.qzT>=4?3:1; addXP (bonusXP)}
     else{btn.classList.add("cno");
          snd("no");
-         toast("Jawaban benar: "+correct,"er");}
+         toast("Correct!: "+correct,"er");}
     setTimeout(function(){S.qzI++;renderQZ();},1200);
 }
 
@@ -401,7 +401,7 @@ function timeoutQZ(){
     all[i].classList.add("off");
     if(all[i].getAttribute("data-o")===correct)all[i].classList.add("cok");
     }
-    toast("Waktu habis! "+correct,"er");
+    toast("Time's up! "+correct,"er");
     setTimeout(function(){S.qzI++;renderQZ();},1500);
 }
 
@@ -409,17 +409,17 @@ function renderQZRes(el){
     var u=getUser();var total=S.qzQ.length*15;
     var total= S.qzQ.length;
     var nilai= Math.round((S.qzCorrect / total) * 100);
-    var msg=pct>=90?"Luar Biasa!":pct>=70?"Bagus Sekali!":pct>=50?"Lumayan, Terus Berlatih!":"Jangan Menyerah!";
+    var msg=pct>=90?"Excellent!":pct>=70?"Great Job!":pct>=50?"Keep practicing!":"Don't Give Up!";
     if(pct>=70)snd("win");
     u.qPlay=(u.qPlay||0)+1;if(S.qzSc>u.qBest)u.qBest=S.qzSc;saveUsers();
 
     el.innerHTML="";el.appendChild(mkBack("Dashboard"));
     var wrap=document.createElement("div");wrap.className="qz-w";
-    wrap.innerHTML='<div class="gvh"><h2>Hasil Quiz</h2></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Quiz Result</h2></div>'
     +'<div class="gres"><div class="rs">'+S.qzSc+'</div>'
     +'<div class="rl">Nilai: '+total+' / 100 </div>'
     +'<div class="rm">'+msg+'</div>'
-    +'<button class="rbtn" id="qzRe">Main Lagi</button></div>';
+    +'<button class="rbtn" id="qzRe">Play Again</button></div>';
     el.appendChild(wrap);
     document.getElementById("qzRe").onclick=startQuiz;
 }
@@ -452,7 +452,7 @@ function renderMT(){
     var el=document.getElementById("vMatch");
     el.innerHTML="";el.appendChild(mkBack("Dashboard"));
     var wrap=document.createElement("div");wrap.className="mt-w";
-    wrap.innerHTML='<div class="gvh"><h2>Match Game</h2><p>Cocokkan kata Inggris dengan arti Indonesia</p></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Match Game</h2><p>Match English words with their meanings</p></div>'
     +'<div class="mt-hd">'
     +'<div class="mt-st"><i class="fas fa-hand-pointer"></i> Langkah: <strong id="mtMv">'+S.mtMov+'</strong></div>'
     +'<div class="mt-st"><i class="fas fa-clock"></i> <strong id="mtT">'+fmtTime(S.mtT)+'</strong></div>'
@@ -499,16 +499,16 @@ function clickMT(card){
 
 function renderMTRes(){
     var u=getUser();snd("win");
-    var r=S.mtMov<=10?"Sempurna!":S.mtMov<=16?"Hebat!":S.mtMov<=24?"Bagus!":"Terus Berlatih!";
+    var r=S.mtMov<=10?"Perfect!":S.mtMov<=16?"Great!":S.mtMov<=24?"Good!":"Keep Practicing!";
     u.mPlay=(u.mPlay||0)+1;if(S.mtMov<u.mBest)u.mBest=S.mtMov;saveUsers();
     var el=document.getElementById("vMatch");el.innerHTML="";el.appendChild(mkBack("Dashboard"));
     var wrap=document.createElement("div");wrap.className="mt-w";
-    wrap.innerHTML='<div class="gvh"><h2>Hasil Match</h2></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Match result</h2></div>'
     +'<div class="mt-res"><div class="mrt">'+fmtTime(S.mtT)+'</div>'
-    +'<div class="mrl">Waktu Selesai</div>'
+    +'<div class="mrl">Time Completed</div>'
     +'<div class="mrm" style="font-family:var(--fd);font-size:1.25rem;font-weight:700;margin:10px 0 4px">'+r+'</div>'
     +'<div class="mrm" style="font-size:.9rem;color:var(--t2)">'+S.mtMov+' langkah</div>'
-    +'<button class="rbtn mp" id="mtRe">Main Lagi</button></div>';
+    +'<button class="rbtn mp" id="mtRe">Play Again</button></div>';
     el.appendChild(wrap);
     document.getElementById("mtRe").onclick=startMatch;
 }
@@ -539,7 +539,7 @@ function renderER(){
 
     el.innerHTML="";el.appendChild(mkBack("Dashboard"));
     var wrap=document.createElement("div");wrap.className="er-w";
-    wrap.innerHTML='<div class="gvh"><h2>Error Recognition</h2><p>Klik kata yang salah dalam kalimat</p></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Error Recognition</h2><p>Click the incorrect word in the sentences</p></div>'
     +'<div class="er-hd"><span class="er-sc"><i class="fas fa-star" style="margin-right:4px"></i>'+S.erSc+'</span>'
     +'<span class="er-tm" id="erTi"><i class="fas fa-clock"></i><span id="erTn">'+S.erT+'</span>s</span></div>'
     +'<div class="er-pb"><div class="er-pf" style="width:'+pct+'%"></div></div>'
@@ -585,11 +585,11 @@ function ansER(wordEl){
     for(var i=0;i<all.length;i++){
         if(cleanW(all[i].textContent)===error){all[i].classList.add("whint");break;}
     }
-    toast('Kata salah: "'+q.e+'"','er');
+    toast('incorrect: "'+q.e+'"','er');
     }
 
     document.getElementById("erExp").classList.add("show");
-    document.getElementById("erCorr").textContent='"'+q.e+'" seharusnya "'+q.c+'"';
+    document.getElementById("erCorr").textContent='"'+q.e+'" should be "'+q.c+'"';
     document.getElementById("erWhy").textContent=q.x;
     setTimeout(function(){S.erI++;renderER();},2800);
 }
@@ -602,9 +602,9 @@ function timeoutER(){
     if(cleanW(all[i].textContent)===cleanW(q.e))all[i].classList.add("whint");
     }
     document.getElementById("erExp").classList.add("show");
-    document.getElementById("erCorr").textContent='"'+q.e+'" seharusnya "'+q.c+'"';
+    document.getElementById("erCorr").textContent='"'+q.e+'" should be "'+q.c+'"';
     document.getElementById("erWhy").textContent=q.x;
-    toast("Waktu habis! "+q.e+" → "+q.c,"er");
+    toast("Time's up! "+q.e+" → "+q.c,"er");
     setTimeout(function(){S.erI++;renderER();},3000);
 }
 
@@ -616,9 +616,9 @@ function renderERRes(el){
   /* FIX: ternary chain yang benar */
     var msg;
     if(pct>=90){msg="Grammar Master!";}
-    else if(pct>=70){msg="Bagus Sekali!";}
-    else if(pct>=50){msg="Lumayan!";}
-    else{msg="Terus Berlatih!";}
+    else if(pct>=70){msg="Excellent!";}
+    else if(pct>=50){msg="Good try!";}
+    else{msg="Keep Practicing!";}
     if(pct>=70)snd("win");
     u.ePlay=(u.ePlay||0)+1;if(correct>u.eBest)u.eBest=correct;saveUsers();
 
@@ -629,12 +629,12 @@ function renderERRes(el){
 
     el.innerHTML="";el.appendChild(mkBack("Dashboard"));
     var wrap=document.createElement("div");wrap.className="er-w";
-    wrap.innerHTML='<div class="gvh"><h2>Hasil Error Recognition</h2></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Error Recognition Result</h2></div>'
     +'<div class="mt-res"><div class="ers" style="font-family:var(--fd);font-size:3.5rem;font-weight:900;background:linear-gradient(135deg,var(--v4),var(--ac));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">'+correct+' / '+total+'</div>'
-    +'<div class="mrl">Jawaban benar ('+pct+'%)</div>'
+    +'<div class="mrl">Correct Answers ('+pct+'%)</div>'
     +'<div class="mrm" style="font-family:var(--fd);font-size:1.25rem;font-weight:700;margin:10px 0 4px">'+msg+'</div>'
     +'<div class="er-break">'+catHtml+'</div>'
-    +'<button class="rbtn ep" id="erRe">Main Lagi</button></div>';
+    +'<button class="rbtn ep" id="erRe">play Again</button></div>';
     el.appendChild(wrap);
     document.getElementById("erRe").onclick=startError;
 }

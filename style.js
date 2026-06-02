@@ -406,21 +406,37 @@ function timeoutQZ(){
 }
 
 function renderQZRes(el){
-    var u=getUser();var total=S.qzQ.length*15;
-    var total= S.qzQ.length;
-    var nilai= Math.round((S.qzCorrect / total) * 100);
-    var msg=pct>=90?"Excellent!":pct>=70?"Great Job!":pct>=50?"Keep practicing!":"Don't Give Up!";
-    if(pct>=70)snd("win");
-    u.qPlay=(u.qPlay||0)+1;if(S.qzSc>u.qBest)u.qBest=S.qzSc;saveUsers();
+    var u=getUser();
 
-    el.innerHTML="";el.appendChild(mkBack("Dashboard"));
-    var wrap=document.createElement("div");wrap.className="qz-w";
-    wrap.innerHTML='<div class="gvh"><h2>Quiz Result</h2></div>'
-    +'<div class="gres"><div class="rs">'+S.qzSc+'</div>'
-    +'<div class="rl">Nilai: '+total+' / 100 </div>'
-    +'<div class="rm">'+msg+'</div>'
-    +'<button class="rbtn" id="qzRe">Play Again</button></div>';
+    var total = S.qzQ.length;
+    var pct = Math.round((S.qzSc / total) * 100);
+
+    var msg = pct>=90?"Excellent!":
+              pct>=70?"Great Job!":
+              pct>=50?"Keep practicing!":
+              "Don't Give Up!";
+
+    if(pct>=70)snd("win");
+
+    u.qPlay=(u.qPlay||0)+1;
+    if(S.qzSc>u.qBest)u.qBest=S.qzSc;
+    saveUsers();
+
+    el.innerHTML="";
+    el.appendChild(mkBack("Dashboard"));
+
+    var wrap=document.createElement("div");
+    wrap.className="qz-w";
+
+    wrap.innerHTML =
+      '<div class="gvh"><h2>Quiz Result</h2></div>'
+      +'<div class="gres"><div class="rs">'+S.qzSc+'</div>'
+      +'<div class="rl">Score: '+S.qzSc+' / '+total+'</div>'
+      +'<div class="rm">'+msg+'</div>'
+      +'<button class="rbtn" id="qzRe">Play Again</button></div>';
+
     el.appendChild(wrap);
+
     document.getElementById("qzRe").onclick=startQuiz;
 }
 

@@ -383,8 +383,13 @@ function ansQZ(btn){
     all[i].classList.add("off");
     if(all[i].getAttribute("data-o")===correct)all[i].classList.add("cok");
     }
-    if(ok){btn.classList.add("cok");snd("ok");var bonus=S.qzT>=7?15:S.qzT>=4?10:5;S.qzSc+=bonus;addXP(bonus);}
-    else{btn.classList.add("cno");snd("no");toast("Jawaban: "+correct,"er");}
+    if(ok){btn.classList.add("cok");
+           snd("ok");
+           S.qzSc += 1;
+           var bonusXP= S.qzT>=7?5:S.qzT>=4?3:1; addXP (bonusXP)}
+    else{btn.classList.add("cno");
+         snd("no");
+         toast("Jawaban benar: "+correct,"er");}
     setTimeout(function(){S.qzI++;renderQZ();},1200);
 }
 
@@ -402,7 +407,8 @@ function timeoutQZ(){
 
 function renderQZRes(el){
     var u=getUser();var total=S.qzQ.length*15;
-    var pct=Math.round(S.qzSc/total*100);
+    var total= S.qzQ.length;
+    var nilai= Math.round((S.qzCorrect / total) * 100);
     var msg=pct>=90?"Luar Biasa!":pct>=70?"Bagus Sekali!":pct>=50?"Lumayan, Terus Berlatih!":"Jangan Menyerah!";
     if(pct>=70)snd("win");
     u.qPlay=(u.qPlay||0)+1;if(S.qzSc>u.qBest)u.qBest=S.qzSc;saveUsers();
@@ -411,7 +417,7 @@ function renderQZRes(el){
     var wrap=document.createElement("div");wrap.className="qz-w";
     wrap.innerHTML='<div class="gvh"><h2>Hasil Quiz</h2></div>'
     +'<div class="gres"><div class="rs">'+S.qzSc+'</div>'
-    +'<div class="rl">Skor dari '+total+' ('+pct+'%)</div>'
+    +'<div class="rl">Nilai: '+total+' / 100 </div>'
     +'<div class="rm">'+msg+'</div>'
     +'<button class="rbtn" id="qzRe">Main Lagi</button></div>';
     el.appendChild(wrap);

@@ -247,7 +247,7 @@ function renderDash(){
     +'<span><i class="fas fa-trophy"></i> Best: '+qBestTxt+'</span>'
     +'<span><i class="fas fa-gamepad"></i> Played : '+qPlayTxt+'</span>'
     +'</div>'
-    +'<button class="gc-play"><i class="fas fa-play"></i> Main Quiz</button>'
+    +'<button class="gc-play"><i class="fas fa-play"></i> Play Quiz</button>'
     +'</div>'
 
     +'<div class="gc" id="gcMatch">'
@@ -258,7 +258,7 @@ function renderDash(){
     +'<span><i class="fas fa-trophy"></i> Best: '+mBestTxt+'</span>'
     +'<span><i class="fas fa-gamepad"></i> Played : '+mPlayTxt+'</span>'
     +'</div>'
-    +'<button class="gc-play mp"><i class="fas fa-play"></i> Main Match</button>'
+    +'<button class="gc-play mp"><i class="fas fa-play"></i> Play Match</button>'
     +'</div>'
 
     +'<div class="gc" id="gcError">'
@@ -269,7 +269,7 @@ function renderDash(){
     +'<span><i class="fas fa-trophy"></i> Best: '+eBestTxt+'</span>'
     +'<span><i class="fas fa-gamepad"></i> Played : '+ePlayTxt+'</span>'
     +'</div>'
-    +'<button class="gc-play ep"><i class="fas fa-play"></i> Main Error</button>'
+    +'<button class="gc-play ep"><i class="fas fa-play"></i> Play Error</button>'
     +'</div>'
 
     +'</div></div>';

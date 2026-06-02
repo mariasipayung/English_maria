@@ -242,7 +242,7 @@ function renderDash(){
     +'<div class="gc" id="gcQuiz">'
     +'<div class="gc-icon qi"><i class="fas fa-bolt"></i></div>'
     +'<h3>Vocabulary Quiz</h3>'
-    +'<p>Select the correct meaning. Each Correct answer = 10 XP</p>'
+    +'<p>Improve Your English Vocabulary</p>'
     +'<div class="gc-stats">'
     +'<span><i class="fas fa-trophy"></i> Best: '+qBestTxt+'</span>'
     +'<span><i class="fas fa-gamepad"></i> Played : '+qPlayTxt+'</span>'
@@ -409,17 +409,21 @@ function renderQZRes(el){
     var u=getUser();
 
     var total = S.qzQ.length;
-    var pct = Math.round((S.qzSc / total) * 100);
 
-    var msg = pct>=90?"Excellent!":
-              pct>=70?"Great Job!":
-              pct>=50?"Keep practicing!":
-              "Don't Give Up!";
+    // ❗ FIX: pastikan tidak NaN
+    var score = S.qzSc;
+    var pct = total > 0 ? Math.round((score / total) * 100) : 0;
 
-    if(pct>=70)snd("win");
+    var msg =
+        pct>=90?"Excellent!":
+        pct>=70?"Great Job!":
+        pct>=50?"Keep practicing!":
+        "Don't Give Up!";
 
-    u.qPlay=(u.qPlay||0)+1;
-    if(S.qzSc>u.qBest)u.qBest=S.qzSc;
+    if(pct>=70) snd("win");
+
+    u.qPlay = (u.qPlay||0) + 1;
+    if(score > u.qBest) u.qBest = score;
     saveUsers();
 
     el.innerHTML="";
@@ -429,15 +433,17 @@ function renderQZRes(el){
     wrap.className="qz-w";
 
     wrap.innerHTML =
-      '<div class="gvh"><h2>Quiz Result</h2></div>'
-      +'<div class="gres"><div class="rs">'+S.qzSc+'</div>'
-      +'<div class="rl">Score: '+S.qzSc+' / '+total+'</div>'
-      +'<div class="rm">'+msg+'</div>'
-      +'<button class="rbtn" id="qzRe">Play Again</button></div>';
+        '<div class="gvh"><h2>Vocabulary Quiz</h2><p>Improve Your English Vocabulary</p></div>'
+        +'<div class="gres">'
+        +'<div class="rs">'+score+'</div>'
+        +'<div class="rl">Score: '+score+' / '+total+'</div>'
+        +'<div class="rm">'+msg+'</div>'
+        +'<button class="rbtn" id="qzRe">Play Again</button>'
+        +'</div>';
 
     el.appendChild(wrap);
 
-    document.getElementById("qzRe").onclick=startQuiz;
+    document.getElementById("qzRe").onclick = startQuiz;
 }
 
 /* ============================================================

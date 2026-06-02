@@ -389,7 +389,7 @@ function ansQZ(btn){
            var bonusXP= S.qzT>=7?5:S.qzT>=4?3:1; addXP (bonusXP)}
     else{btn.classList.add("cno");
          snd("no");
-         toast("Correct!: "+correct,"er");}
+         toast("incorrect!: "+correct,"er");}
     setTimeout(function(){S.qzI++;renderQZ();},1200);
 }
 
@@ -568,7 +568,7 @@ function renderER(){
     +'<div style="font-size:.75rem;color:var(--t3);margin-bottom:8px">Soal '+(S.erI+1)+' dari '+S.erQ.length+'</div>'
     +'<div class="er-cat">'+q.cat+'</div>'
     +'<div class="er-sent"><div class="er-words" id="erW"></div></div>'
-    +'<div class="er-exp" id="erExp"><strong>Koreksi:</strong> <span id="erCorr"></span><br><span id="erWhy"></span></div>';
+    +'<div class="er-exp" id="erExp"><strong>Correction:</strong> <span id="erCorr"></span><br><span id="erWhy"></span></div>';
     el.appendChild(wrap);
 
     var wEl=document.getElementById("erW");

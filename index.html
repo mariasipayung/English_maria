@@ -20,19 +20,19 @@
         <button class="ltab on" data-t="login">Masuk</button>
         <button class="ltab" data-t="register">Daftar</button>
     </div>
-    <div id="loginForm">
+    <form id="loginForm">
         <div class="lfield"><label>Username</label><input type="text" id="lUser" placeholder="Masukkan username" autocomplete="username"></div>
-        <div class="lfield"><label>Password</label><input type="password" id="lPass" placeholder="Masukkan password" autocomplete="current-password"><button class="eye" type="button" data-target="lPass"><i class="fas fa-eye"></i></button></div>
+        <div class="lfield"><label>Password</label><input type="password" id="lPass" placeholder="Masukkan password" autocomplete="current-password"><button class="eye" type="button" data-target="lPass" aria-label="Tampilkan Pasword"><i class="fas fa-eye"></i></button></div>
         <div class="lerr" id="lErr"></div>
-        <button class="lbtn" id="lBtn">Masuk</button>
-    </div>
-    <div id="regForm" style="display:none">
+        <button type="button" class="lbtn" id="lBtn">Masuk</button>
+    </form>
+    <form id="regForm" style="display:none">
         <div class="lfield"><label>Username</label><input type="text" id="rUser" placeholder="Buat username (min 3 karakter)" autocomplete="username"></div>
         <div class="lfield"><label>Password</label><input type="password" id="rPass" placeholder="Buat password (min 4 karakter)" autocomplete="new-password"><button class="eye" type="button" data-target="rPass"><i class="fas fa-eye"></i></button></div>
         <div class="lfield"><label>Konfirmasi Password</label><input type="password" id="rConf" placeholder="Ulangi password" autocomplete="new-password"></div>
         <div class="lerr" id="rErr"></div>
-        <button class="lbtn" id="rBtn">Daftar</button>
-    </div>
+        <button type="button" class"lbtn" id="rBtn">Daftar</button>
+    </form>
     <div class="lnote"><i class="fas fa-lock" style="margin-right:4px"></i>Progress tersimpan otomatis di browser ini</div>
     </div>
 </div>

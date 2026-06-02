@@ -342,7 +342,7 @@ function renderQZ(){
     el.appendChild(mkBack("Dashboard"));
 
     var wrap=document.createElement("div");wrap.className="qz-w";
-    wrap.innerHTML='<div class="gvh"><h2>Vocabulary Quiz</h2><p>Choose the correct answer</p></div>'
+    wrap.innerHTML='<div class="gvh"><h2>Vocabulary Quiz</h2><p>Improve Your English Vocabulary</p></div>'
     +'<div class="qz-hd"><span class="qz-sc"><i class="fas fa-star" style="margin-right:4px"></i>'+S.qzSc+'</span>'
     +'<span class="qz-tm" id="qzTi"><i class="fas fa-clock"></i><span id="qzTn">'+S.qzT+'</span>s</span></div>'
     +'<div class="qz-pb"><div class="qz-pf" style="width:'+pct+'%"></div></div>'
